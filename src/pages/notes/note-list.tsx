@@ -1,4 +1,4 @@
-import {ComponentProps} from "react"
+import React, {ComponentProps} from "react"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 
 import {cn} from "@/lib/utils"
@@ -6,6 +6,8 @@ import {Note} from "@/data.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import useNoteStore from "@/store/useNoteStore.ts";
+import {HeartFilledIcon} from "@radix-ui/react-icons";
+import {Heart} from "lucide-react";
 
 interface MailListProps {
     items: Note[]
@@ -30,9 +32,9 @@ export function NoteList({items}: MailListProps) {
                             <div className="flex items-center">
                                 <div className="flex items-center gap-2">
                                     <div className="font-semibold">{item.title}</div>
-                                    {!item.favorite && (
-                                        <span className="flex h-4 w-4 rounded-full bg-blue-600">fav</span>
-                                    )}
+                                    {!item.favorite ?
+                                        <HeartFilledIcon className="mr-2 h-4 w-4 text-red-600" /> :
+                                        <Heart className="mr-2 h-4 w-4"/>}
                                 </div>
                                 <div
                                     className={cn(
@@ -55,7 +57,7 @@ export function NoteList({items}: MailListProps) {
                         {item.labels.length ? (
                             <div className="flex items-center gap-2">
                                 {item.labels.map((label) => (
-                                    <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
+                                    <Badge key={label} variant="outline">
                                         {label}
                                     </Badge>
                                 ))}

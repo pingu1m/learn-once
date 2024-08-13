@@ -6,10 +6,36 @@ import {Input} from "@/components/ui/input.tsx";
 import {NoteList} from "@/pages/notes/note-list.tsx";
 import {NoteDisplay} from "@/pages/notes/note-display.tsx";
 import useNoteStore from "@/store/useNoteStore.ts";
+import {useEffect, useState} from "react";
+import * as sea from "node:sea";
 
 export function Notes() {
     const defaultLayout = [265, 440, 655]
     const [notes, editingNote] = useNoteStore(state => [state.notes, state.editingNote]);
+    const [searchData, setSearchData] = useState(notes);
+
+    useEffect(() => {
+        setSearchData(notes)
+    }, [notes]);
+
+    const searchItem = (query) => {
+        if (!query) {
+            setSearchData(notes);
+            return;
+        }
+        query = query.toLowerCase();
+
+        const finalResult = [];
+        notes.forEach((item) => {
+            if (
+                item.title.toLowerCase().indexOf(query) !== -1 ||
+                item.labels.includes(query)
+            ) {
+                finalResult.push(item);
+            }
+        });
+        setSearchData(finalResult);
+    };
 
     return (
         <>
@@ -37,12 +63,14 @@ export function Notes() {
                         <form>
                             <div className="relative">
                                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"/>
-                                <Input placeholder="Search" className="pl-8"/>
+                                <Input placeholder="Search" className="pl-8"
+                                       onChange={(e) => searchItem(e.target.value)}
+                                />
                             </div>
                         </form>
                     </div>
                     <TabsContent value="all" className="m-0">
-                        <NoteList items={notes}/>
+                        <NoteList items={searchData}/>
                     </TabsContent>
                     <TabsContent value="unread" className="m-0">
                         <NoteList items={notes.filter((item) => !item.favorite)}/>

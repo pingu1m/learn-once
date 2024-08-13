@@ -4,18 +4,7 @@ import {ResizableHandle, ResizablePanel, ResizablePanelGroup} from "@/components
 import {cn} from "@/lib/utils.ts";
 import {AccountSwitcher} from "@/pages/notes/account-switcher.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
-import {
-    AlertCircle,
-    Archive,
-    ArchiveX,
-    File,
-    Inbox,
-    MessagesSquare,
-    Send,
-    ShoppingCart,
-    Trash2,
-    Users2
-} from "lucide-react";
+import {File, Inbox, Settings} from "lucide-react";
 import * as React from "react";
 import {accounts} from "@/data.tsx";
 import {Notes} from "@/pages/notes/notes.tsx";
@@ -40,7 +29,6 @@ function Main() {
                         sizes
                     )}`
                 }}
-                // className="h-full max-h-[800px] items-stretch"
                 className="h-full max-h-screen items-stretch"
             >
                 <ResizablePanel
@@ -49,114 +37,50 @@ function Main() {
                     collapsible={true}
                     minSize={15}
                     maxSize={20}
-                    onCollapse={(collapsed) => {
-                        setIsCollapsed(collapsed)
-                        document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-                            collapsed
-                        )}`
+                    onResize={(x) => {
+                        if (x == navCollapsedSize) {
+                            setIsCollapsed(true)
+                        } else {
+                            setIsCollapsed(false)
+                        }
                     }}
                     className={cn(
+                        "flex flex-col justify-between",
                         isCollapsed &&
                         "min-w-[50px] transition-all duration-300 ease-in-out"
                     )}
                 >
-                    <div
-                        className={cn(
-                            "flex h-[52px] items-center justify-center",
-                            isCollapsed ? "h-[52px]" : "px-2"
-                        )}
-                    >
-                        <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts}/>
+                    <div>
+                        <div
+                            className={cn(
+                                "flex h-[52px] items-center justify-center",
+                                isCollapsed ? "h-[52px]" : "px-2"
+                            )}
+                        >
+                            <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts}/>
+                        </div>
+                        <Separator/>
+                        <Nav
+                            isCollapsed={isCollapsed}
+                            links={[
+                                {title: "Notes", label: "128", icon: Inbox, variant: "default", href: "/notes",},
+                                {title: "Cards", label: "9", icon: File, variant: "ghost", href: "/cards",},
+                            ]}
+                        />
+                        <Separator/>
+                        <small className="p-4">
+                            labels
+                        </small>
                     </div>
-                    <Separator/>
-                    <Nav
-                        isCollapsed={isCollapsed}
-                        links={[
-                            {
-                                title: "Notes",
-                                label: "128",
-                                icon: Inbox,
-                                variant: "default",
-                                href: "/notes",
-                            },
-                            {
-                                title: "Drafts",
-                                label: "9",
-                                icon: File,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Sent",
-                                label: "",
-                                icon: Send,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Junk",
-                                label: "23",
-                                icon: ArchiveX,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Trash",
-                                label: "",
-                                icon: Trash2,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Archive",
-                                label: "",
-                                icon: Archive,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                        ]}
-                    />
-                    <Separator/>
-                    <Nav
-                        isCollapsed={isCollapsed}
-                        links={[
-                            {
-                                title: "Social",
-                                label: "972",
-                                icon: Users2,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Updates",
-                                label: "342",
-                                icon: AlertCircle,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Forums",
-                                label: "128",
-                                icon: MessagesSquare,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Shopping",
-                                label: "8",
-                                icon: ShoppingCart,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                            {
-                                title: "Promotions",
-                                label: "21",
-                                icon: Archive,
-                                variant: "ghost",
-                                href: "/cards",
-                            },
-                        ]}
-                    />
+                    <div>
+                        <Nav
+                            isCollapsed={isCollapsed}
+                            links={[
+                                {title: "Settings", label: "972", icon: Settings, variant: "default", href: "/cards",},
+                            ]}
+                        />
+
+                    </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle/>
                 <Routes>

@@ -60,9 +60,6 @@ export function Cards({}: MailProps) {
             </ResizablePanel>
             <ResizableHandle withHandle/>
             <ResizablePanel defaultSize={defaultLayout[2]}>
-                <NoteDisplay
-                    mail={notes.find((item) => item.id === mail.selected) || null}
-                />
             </ResizablePanel>
         </>
     )
