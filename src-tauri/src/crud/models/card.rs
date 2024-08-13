@@ -4,11 +4,12 @@ use sqlx::{FromRow, migrate::MigrateDatabase, Row, Sqlite, SqlitePool};
 use crate::util;
 use sqlx::Executor;
 use ts_rs::TS;
+use crate::database::AppState;
 use crate::util::db;
 
 #[derive(TS, Serialize, Deserialize, Clone, FromRow, Debug)]
-#[ts(rename_all="camelCase")]
-#[ts(export,export_to = "../../card.ts")]
+#[ts(rename_all = "camelCase")]
+#[ts(export, export_to = "../../card.ts")]
 pub struct Card {
     id: i64,
     title: String,
@@ -18,9 +19,11 @@ pub struct Card {
 }
 
 #[tauri::command]
-pub async fn card_insert(card: Card) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn card_insert(state: tauri::State<'_, AppState>, card: Card) -> Result<i64, String> {
+    // let db_url = util::db::get_database();
+    // let db = SqlitePool::connect(&db_url).await.unwrap();
+
+    let db = &state.db;
 
     let query_result = sqlx::query(
         "INSERT INTO card (title, front, back, extra)
@@ -30,7 +33,7 @@ pub async fn card_insert(card: Card) -> Result<i64, String> {
         .bind(&card.front)
         .bind(&card.back)
         .bind(&card.extra)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -44,9 +47,8 @@ pub async fn card_insert(card: Card) -> Result<i64, String> {
 }
 
 #[tauri::command]
-pub async fn card_update(card: Card) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn card_update(state: tauri::State<'_, AppState>, card: Card) -> Result<i64, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query(
         "UPDATE card
@@ -58,7 +60,7 @@ pub async fn card_update(card: Card) -> Result<i64, String> {
         .bind(&card.back)
         .bind(&card.extra)
         .bind(card.id)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -72,13 +74,13 @@ pub async fn card_update(card: Card) -> Result<i64, String> {
 
 
 #[tauri::command]
-pub async fn card_delete(id: i64) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn card_delete(state: tauri::State<'_, AppState>, id: i64) -> Result<i64, String> {
+    let db = &state.db;
+
 
     let query_result = sqlx::query("DELETE FROM card WHERE id=?")
         .bind(id)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -92,12 +94,12 @@ pub async fn card_delete(id: i64) -> Result<i64, String> {
 
 
 #[tauri::command]
-pub async fn card_select() -> Result<String, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn card_select(state: tauri::State<'_, AppState>) -> Result<String, String> {
+    let db = &state.db;
+
 
     let query_result: Result<Vec<Card>, _> = sqlx::query_as("SELECT * FROM card ORDER BY id DESC")
-        .fetch_all(&db)
+        .fetch_all(db)
         .await;
 
     if query_result.is_err() {
