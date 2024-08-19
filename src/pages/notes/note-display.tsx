@@ -9,7 +9,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.t
 import monacoThemes from 'monaco-themes/themes/themelist';
 import {Label} from "@/components/ui/label.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
-import useNoteStore from "@/store/useNoteStore.ts";
+// import useNoteStore from "@/store/useNoteStore.ts";
 import React, {useEffect, useRef, useState} from "react";
 import Editor, {useMonaco} from "@monaco-editor/react";
 import {Input} from "@/components/ui/input.tsx";
@@ -18,19 +18,19 @@ import {initVimMode} from 'monaco-vim';
 import {HeartFilledIcon, MixerHorizontalIcon} from "@radix-ui/react-icons";
 import {supportedLanguages} from "@/pages/notes/utils.ts";
 import {InputTags} from "@/components/ui/input-tags.tsx";
+import {useUpdateNote} from "@/components/notes/noteApi.ts";
 
 interface NoteDisplayProps {
     editingNote: Note | null
 }
 
 export function NoteDisplay({editingNote}: NoteDisplayProps) {
-    const {updateNote} = useNoteStore(state => ({
-        updateNote: state.updateNote,
-    }));
+    // const {updateNote} = useNoteStore(state => ({
+    //     updateNote: state.updateNote,
+    // }));
     const [note, setNote] = useState<Note | null>(editingNote);
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const monaco = useMonaco();
-    // const monacoRef = useRef(null);
     const [vimMode, setVimMode] = useState(null);
     const editorRef = useRef(null);
 
@@ -39,9 +39,24 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
     const [editorTheme, setEditorTheme] = useState("monokai");
     const [editorVimMode, setEditorVimMode] = useState(false);
     const [labels, setLabels] = useState([]);
+    const { mutate: updateNote } = useUpdateNote();
+
+
+    // React Query mutation for updating the note
+    // const updateNoteMutation = useMutation(
+    //     (updatedNote) => invoke('note_update', { note: updatedNote }),
+    //     {
+    //         onSuccess: () => {
+    //             console.log('Note updated successfully');
+    //         },
+    //         onError: (error) => {
+    //             console.error('Error updating note:', error);
+    //         },
+    //     }
+    // );
 
     useEffect(() => {
-        setTheme()
+        setTheme();
     }, [monaco]);
 
     const setTheme = () => {
@@ -61,31 +76,30 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
 
     useEffect(() => {
         if (editingNote) {
-            setLabels(editingNote.labels);
+            setLabels(editingNote.labels.split(','));
             setNote(editingNote);
         }
     }, [editingNote]);
 
-    useEffect(() => {
-        return () => {
-            if (saveTimeoutRef.current) {
-                clearTimeout(saveTimeoutRef.current);
-                // @ts-ignore
-                updateNote({...note, updated_at: new Date().toISOString()});
-            }
-        };
-    }, [note]);
+    // useEffect(() => {
+    //     return () => {
+    //         if (saveTimeoutRef.current) {
+    //             clearTimeout(saveTimeoutRef.current);
+    //             if (note) {
+    //                 // updateNoteMutation.mutate({ ...note, updated_at: new Date().toISOString() });
+    //                 updateNote({...note, updated_at: new Date().toISOString()});
+    //             }
+    //             // @ts-ignore
+    //         }
+    //     };
+    // }, [note]);
 
     const handleEditorDidMount = (editor, monaco) => {
         // setup key bindings
         editor.addAction({
-            // an unique identifier of the contributed action
             id: "some-unique-id",
-            // a label of the action that will be presented to the user
             label: "Some label!",
             keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
-
-            // the method that will be executed when the action is triggered.
             run: function (editor) {
                 alert("we wanna save something => " + editor.getValue());
                 return null;
@@ -115,17 +129,19 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         toggleVimMode();
     }, [editorVimMode]);
 
-    useEffect(() => {
-        handleNoteChange('labels', labels)
-    }, [labels])
+    // useEffect(() => {
+    //     handleNoteChange('labels', labels)
+    // }, [labels])
 
     const debounceUpdateNote = (updatedNote: Note) => {
-        if (saveTimeoutRef.current) {
-            clearTimeout(saveTimeoutRef.current);
-        }
-        saveTimeoutRef.current = setTimeout(() => {
-            updateNote(updatedNote);
-        }, 5000);
+        updateNote(updatedNote);
+        // if (saveTimeoutRef.current) {
+        //     clearTimeout(saveTimeoutRef.current);
+        // }
+        // saveTimeoutRef.current = setTimeout(() => {
+        //     updateNote(updatedNote);
+        //     // updateNoteMutation.mutate(updatedNote);
+        // }, 5000);
     };
 
     const handleNoteChange = (key: string, value: string | string[] | boolean) => {
@@ -135,8 +151,8 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
             date: new Date().toISOString(),
             [key]: value
         } as Note;
-        setNote(updatedNote)
         debounceUpdateNote(updatedNote);
+        setNote(updatedNote)
     };
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -309,7 +325,7 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                     <Separator className="mt-auto"/>
                     <div className="p-4">
                         <InputTags value={labels} onChange={(v) => {
-                            setLabels(v)
+                            // setLabels(v)
                         }}/>
                     </div>
                 </div>

@@ -1,12 +1,11 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, SqlitePool};
-use crate::util;
-use sqlx::Executor;
+use sqlx::{FromRow, Executor};
 use ts_rs::TS;
 use crate::crud::models::card::Card;
+use crate::state::AppState;
 
 #[derive(TS, Serialize, Deserialize, Clone, FromRow, Debug)]
-#[ts(export, rename_all="camelCase")]
+#[ts(export, rename_all = "camelCase")]
 #[ts(export_to = "../../../src/bindings/session.ts")]
 pub struct Session {
     id: i64,
@@ -18,9 +17,8 @@ pub struct Session {
 
 
 #[tauri::command]
-pub async fn session_insert(session: Session) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn session_insert(state: tauri::State<'_, AppState>, session: Session) -> Result<i64, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query(
         "INSERT INTO session (created_at, updated_at, num_cards, num_cards_learned)
@@ -30,7 +28,7 @@ pub async fn session_insert(session: Session) -> Result<i64, String> {
         .bind(&session.updated_at)
         .bind(session.num_cards)
         .bind(session.num_cards_learned)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -44,9 +42,8 @@ pub async fn session_insert(session: Session) -> Result<i64, String> {
 }
 
 #[tauri::command]
-pub async fn session_update(session: Session) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn session_update(state: tauri::State<'_, AppState>, session: Session) -> Result<i64, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query(
         "UPDATE session
@@ -58,7 +55,7 @@ pub async fn session_update(session: Session) -> Result<i64, String> {
         .bind(session.num_cards)
         .bind(session.num_cards_learned)
         .bind(session.id)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -71,13 +68,12 @@ pub async fn session_update(session: Session) -> Result<i64, String> {
 }
 
 #[tauri::command]
-pub async fn session_delete(id: i64) -> Result<i64, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn session_delete(state: tauri::State<'_, AppState>, id: i64) -> Result<i64, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query("DELETE FROM session WHERE id=?")
         .bind(id)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -90,12 +86,11 @@ pub async fn session_delete(id: i64) -> Result<i64, String> {
 }
 
 #[tauri::command]
-pub async fn session_select() -> Result<String, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn session_select(state: tauri::State<'_, AppState>) -> Result<String, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query_as::<_, Session>("SELECT * FROM session ORDER BY id DESC")
-        .fetch_all(&db)
+        .fetch_all(db)
         .await;
 
     if query_result.is_err() {
@@ -110,9 +105,8 @@ pub async fn session_select() -> Result<String, String> {
 }
 
 #[tauri::command]
-pub async fn link_card_to_session(session_id: i64, card_id: i64) -> Result<(), String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn link_card_to_session(state: tauri::State<'_, AppState>, session_id: i64, card_id: i64) -> Result<(), String> {
+    let db = &state.db;
 
     let query_result = sqlx::query(
         "INSERT INTO session_cards (session_id, card_id)
@@ -120,7 +114,7 @@ pub async fn link_card_to_session(session_id: i64, card_id: i64) -> Result<(), S
     )
         .bind(session_id)
         .bind(card_id)
-        .execute(&db)
+        .execute(db)
         .await;
 
     if query_result.is_err() {
@@ -133,9 +127,8 @@ pub async fn link_card_to_session(session_id: i64, card_id: i64) -> Result<(), S
 }
 
 #[tauri::command]
-pub async fn fetch_cards_by_session(session_id: i64) -> Result<String, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn fetch_cards_by_session(state: tauri::State<'_, AppState>, session_id: i64) -> Result<String, String> {
+    let db = &state.db;
 
     let query_result = sqlx::query_as::<_, Card>(
         "SELECT c.* FROM card c
@@ -143,7 +136,7 @@ pub async fn fetch_cards_by_session(session_id: i64) -> Result<String, String> {
          WHERE sc.session_id = ?"
     )
         .bind(session_id)
-        .fetch_all(&db)
+        .fetch_all(db)
         .await;
 
     if query_result.is_err() {
@@ -158,9 +151,8 @@ pub async fn fetch_cards_by_session(session_id: i64) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub async fn fetch_sessions_by_card(card_id: i64) -> Result<String, String> {
-    let db_url = util::db::get_database();
-    let db = SqlitePool::connect(&db_url).await.unwrap();
+pub async fn fetch_sessions_by_card(state: tauri::State<'_, AppState>, card_id: i64) -> Result<String, String> {
+    let db = &state.db;
 
     let query_result: Result<Vec<Session>, _> = sqlx::query_as(
         "SELECT s.* FROM session s
@@ -168,7 +160,7 @@ pub async fn fetch_sessions_by_card(card_id: i64) -> Result<String, String> {
          WHERE sc.card_id = ?"
     )
         .bind(card_id)
-        .fetch_all(&db)
+        .fetch_all(db)
         .await;
 
     if query_result.is_err() {

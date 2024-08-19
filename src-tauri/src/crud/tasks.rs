@@ -4,18 +4,6 @@ use tauri::Emitter;
 
 #[tauri::command]
 pub async fn start_periodic_task(app_handle: tauri::AppHandle) -> Result<(), String> {
-    tokio::spawn(async move {
-        loop {
-            // Perform the task here
-            println!("Running periodic task...");
-
-            // Optionally, communicate with the frontend
-            app_handle.emit("periodic-task", "Task executed").unwrap();
-
-            // Wait for the next iteration (e.g., 10 seconds)
-            sleep(Duration::from_secs(10)).await;
-        }
-    });
 
     Ok(())
 }

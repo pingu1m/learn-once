@@ -19,7 +19,7 @@ export function NoteList({items}: MailListProps) {
     return (
         <ScrollArea className="h-screen">
             <div className="flex flex-col gap-2 p-4 pt-0">
-                {items.map((item) => (
+                {items && items.map((item) => (
                     <button
                         key={item.id}
                         className={cn(
@@ -54,15 +54,15 @@ export function NoteList({items}: MailListProps) {
                         <div className="line-clamp-2 text-xs text-muted-foreground">
                             {item.text.substring(0, 300)}
                         </div>
-                        {item.labels.length ? (
-                            <div className="flex items-center gap-2">
-                                {item.labels.map((label) => (
-                                    <Badge key={label} variant="outline">
-                                        {label}
-                                    </Badge>
-                                ))}
-                            </div>
-                        ) : null}
+                        {/*{item.labels.length ? (*/}
+                        {/*    <div className="flex items-center gap-2">*/}
+                        {/*        {item.labels.map((label) => (*/}
+                        {/*            <Badge key={label} variant="outline">*/}
+                        {/*                {label}*/}
+                        {/*            </Badge>*/}
+                        {/*        ))}*/}
+                        {/*    </div>*/}
+                        {/*) : null}*/}
                     </button>
                 ))}
             </div>

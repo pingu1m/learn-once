@@ -8,8 +8,9 @@ import {File, Inbox, Settings} from "lucide-react";
 import * as React from "react";
 import {accounts} from "@/data.tsx";
 import {Notes} from "@/pages/notes/notes.tsx";
-import {Cards} from "@/pages/cards/cards.tsx";
+import {Cards} from "@/pages/sessions/cards.tsx";
 import {Nav} from "@/components/layout/nav.tsx";
+import {Sessions} from "@/pages/sessions/sessions.tsx";
 
 const NoMatch = () => {
     return (<p>There's nothing here: 404!</p>);
@@ -64,7 +65,7 @@ function Main() {
                             isCollapsed={isCollapsed}
                             links={[
                                 {title: "Notes", label: "128", icon: Inbox, variant: "default", href: "/notes",},
-                                {title: "Cards", label: "9", icon: File, variant: "ghost", href: "/cards",},
+                                {title: "Sessions", label: "9", icon: File, variant: "ghost", href: "/sessions",},
                             ]}
                         />
                         <Separator/>
@@ -86,7 +87,7 @@ function Main() {
                 <Routes>
                     <Route index element={<Notes/>}/>
                     <Route path="notes" element={<Notes/>}/>
-                    <Route path="cards" element={<Cards/>}/>
+                    <Route path="sessions" element={<Sessions/>}/>
                     <Route path="*" element={<NoMatch/>}/>
                 </Routes>
             </ResizablePanelGroup>

@@ -7,12 +7,31 @@ import {NoteList} from "@/pages/notes/note-list.tsx";
 import {NoteDisplay} from "@/pages/notes/note-display.tsx";
 import useNoteStore from "@/store/useNoteStore.ts";
 import {useEffect, useState} from "react";
-import * as sea from "node:sea";
+// import * as sea from "node:sea";
+import {useDeleteNote, useNotes} from "@/components/notes/noteApi.ts";
 
 export function Notes() {
     const defaultLayout = [265, 440, 655]
-    const [notes, editingNote] = useNoteStore(state => [state.notes, state.editingNote]);
+    const {data: notes, isLoading, isError} = useNotes();
     const [searchData, setSearchData] = useState(notes);
+    const editingNote = useNoteStore(state => state.editingNote);
+    // const { mutate: deleteNote } = useDeleteNote();
+    // const setSelectedNote = useNoteStore((state) => state.setSelectedNote);
+
+    console.log("---------------------------------------------------------")
+    console.log(notes)
+
+    // {cards?.map((card: Card) => (
+    //     <li key={card.id}>
+    //         <div>
+    //             <strong>{card.title}</strong>
+    //             <button onClick={() => setSelectedCard(card)}>Edit</button>
+    //             <button onClick={() => deleteCard(card.id)}>Delete</button>
+    //         </div>
+    //         <p>{card.front}</p>
+    //     </li>
+    // ))}
+
 
     useEffect(() => {
         setSearchData(notes)
@@ -20,68 +39,89 @@ export function Notes() {
 
     const searchItem = (query) => {
         if (!query) {
-            setSearchData(notes);
+            // setSearchData(notes);
             return;
         }
         query = query.toLowerCase();
 
         const finalResult = [];
-        notes.forEach((item) => {
-            if (
-                item.title.toLowerCase().indexOf(query) !== -1 ||
-                item.labels.includes(query)
-            ) {
-                finalResult.push(item);
-            }
-        });
-        setSearchData(finalResult);
+        // notes.forEach((item) => {
+        //     if (
+        //         item.title.toLowerCase().indexOf(query) !== -1 ||
+        //         item.labels.includes(query)
+        //     ) {
+        //         finalResult.push(item);
+        //     }
+        // });
+        // setSearchData(finalResult);
     };
 
     return (
         <>
             <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-                <Tabs defaultValue="all">
-                    <div className="flex items-center px-4 py-2">
-                        <h1 className="text-xl font-bold">Notes</h1>
-                        <TabsList className="ml-auto">
-                            <TabsTrigger
-                                value="all"
-                                className="text-zinc-600 dark:text-zinc-200"
-                            >
-                                All
-                            </TabsTrigger>
-                            <TabsTrigger
-                                value="unread"
-                                className="text-zinc-600 dark:text-zinc-200"
-                            >
-                                Favorite
-                            </TabsTrigger>
-                        </TabsList>
-                    </div>
-                    <Separator/>
-                    <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                        <form>
-                            <div className="relative">
-                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"/>
-                                <Input placeholder="Search" className="pl-8"
-                                       onChange={(e) => searchItem(e.target.value)}
-                                />
-                            </div>
-                        </form>
-                    </div>
-                    <TabsContent value="all" className="m-0">
-                        <NoteList items={searchData}/>
-                    </TabsContent>
-                    <TabsContent value="unread" className="m-0">
-                        <NoteList items={notes.filter((item) => !item.favorite)}/>
-                    </TabsContent>
-                </Tabs>
+                {isLoading ? (
+                    <div>Loading...</div> // You can replace this with a loader component
+                ) : isError ? (
+                    <div>Error loading note.</div> // You can replace this with an error component
+                ) : (
+                    <Tabs defaultValue="all">
+                        <div className="flex items-center px-4 py-2">
+                            <h1 className="text-xl font-bold">Notes</h1>
+                            <TabsList className="ml-auto">
+                                <TabsTrigger
+                                    value="all"
+                                    className="text-zinc-600 dark:text-zinc-200"
+                                >
+                                    All
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="unread"
+                                    className="text-zinc-600 dark:text-zinc-200"
+                                >
+                                    Favorite
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
+                        <Separator/>
+                        <div
+                            className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                            <form>
+                                <div className="relative">
+                                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"/>
+                                    <Input placeholder="Search" className="pl-8"
+                                           onChange={(e) => searchItem(e.target.value)}
+                                    />
+                                </div>
+                            </form>
+                        </div>
+                        {isLoading ? (
+                            <div>Loading...</div> // You can replace this with a loader component
+                        ) : isError ? (
+                            <div>Error loading note.</div> // You can replace this with an error component
+                        ) : (
+                            <>
+                                <TabsContent value="all" className="m-0">
+                                    {/*{JSON.stringify(notes)}*/}
+                                    <NoteList items={notes}/>
+                                </TabsContent>
+                                <TabsContent value="unread" className="m-0">
+                                    {JSON.stringify(notes)}
+                                    {/*<NoteList items={notes.filter((item) => !item.favorite)}/>*/}
+                                </TabsContent>
+                            </>
+                        )}
+                    </Tabs>
+                )}
             </ResizablePanel>
             <ResizableHandle withHandle/>
             <ResizablePanel defaultSize={defaultLayout[2]}>
-                <NoteDisplay
-                    editingNote={editingNote}
-                />
+                {isLoading ? (
+                    <div>Loading...</div> // You can replace this with a loader component
+                ) : isError ? (
+                    <div>Error loading note.</div> // You can replace this with an error component
+                ) : (
+                    <NoteDisplay editingNote={editingNote}/>
+                )}
             </ResizablePanel>
         </>
     )

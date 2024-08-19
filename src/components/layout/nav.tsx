@@ -3,7 +3,6 @@ import {NavLink} from "react-router-dom";
 import {cn} from "@/lib/utils"
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {invoke} from "@tauri-apps/api/core";
 import {apiCall} from "@/util.ts";
 
 interface NavProps {
@@ -20,24 +19,9 @@ interface NavProps {
 
 
 export function Nav({links, isCollapsed}: NavProps) {
-    const getCall = (funName: string, params: any) => async () => {
-        try {
-            const newMessage = await apiCall(funName, params);
-            // setResult([newMessage as unknown as string, false]);
-            console.log(funName, "-------------------------------------------------------------")
-            console.log(newMessage)
-        } catch (e) {
-            console.error(e);
-            // setResult([`${e}`, true]);
-        }
-    };
     return (
         <div data-collapsed={isCollapsed}
              className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
-            {/*<Button onClick={getCall("create_tables", {})}>Create DB</Button>*/}
-            {/*<Button onClick={getCall("fill_tables", {})}>Fill DB</Button>*/}
-            <Button onClick={getCall("note_select", {})}>Notes</Button>
-            <Button onClick={getCall("card_select", {})}>Cards</Button>
             <nav
                 className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
                 {links.map((link, index) =>

@@ -2,8 +2,8 @@ import React from 'react';
 import useNoteStore from '../store/useNoteStore';
 import {Button} from "../components/ui/button.tsx";
 import {FolderTreeIcon, SearchIcon} from "../components/dashboard/icons.tsx";
-import NoteList from "../components/notes/NoteList.tsx";
-import NoteEditor from "../components/notes/NoteEditor.tsx";
+import NoteList from "@/components/notes_v2/NoteList.tsx";
+import NoteEditor from "@/components/notes_v2/NoteEditor.tsx";
 import {Input} from "../components/ui/input.tsx"; // Ensure the store is correctly imported
 
 export default function NotesPage() {
