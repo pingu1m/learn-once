@@ -3,7 +3,7 @@ import { Table } from "@tanstack/react-table"
 
 // import { Button } from "@/registry/new-york/ui/button"
 // import { Input } from "@/registry/new-york/ui/input"
-// import { DataTableViewOptions } from "@/app/(app)/examples/tasks/components/data-table-view-options"
+// import { DataTableViewOptions } from "@/app/(app)/examples/sessions/components/data-table-view-options"
 
 import { priorities, statuses } from "./data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
@@ -24,7 +24,7 @@ export function DataTableToolbar<TData>({
         <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center space-x-2">
                 <Input
-                    placeholder="Filter tasks..."
+                    placeholder="Filter sessions..."
                     value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("title")?.setFilterValue(event.target.value)

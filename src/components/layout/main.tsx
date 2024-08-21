@@ -58,7 +58,7 @@ function Main() {
                                 isCollapsed ? "h-[52px]" : "px-2"
                             )}
                         >
-                            <AccountSwitcher isCollapsed={isCollapsed} accounts={accounts}/>
+                            <AccountSwitcher isCollapsed={isCollapsed} />
                         </div>
                         <Separator/>
                         <Nav

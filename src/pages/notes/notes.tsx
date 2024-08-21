@@ -9,6 +9,9 @@ import useNoteStore from "@/store/useNoteStore.ts";
 import {useEffect, useState} from "react";
 // import * as sea from "node:sea";
 import {useDeleteNote, useNotes} from "@/components/notes/noteApi.ts";
+import {AccountSwitcher} from "@/pages/notes/account-switcher.tsx";
+import {accounts} from "@/data.tsx";
+import * as React from "react";
 
 export function Notes() {
     const defaultLayout = [265, 440, 655]
@@ -66,7 +69,8 @@ export function Notes() {
                 ) : (
                     <Tabs defaultValue="all">
                         <div className="flex items-center px-4 py-2">
-                            <h1 className="text-xl font-bold">Notes</h1>
+                            <AccountSwitcher isCollapsed={false} />
+                            {/*<h1 className="text-xl font-bold">Notes</h1>*/}
                             <TabsList className="ml-auto">
                                 <TabsTrigger
                                     value="all"

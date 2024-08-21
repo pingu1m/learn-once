@@ -1,19 +1,20 @@
-import { ColumnDef } from "@tanstack/react-table"
+import {ColumnDef} from "@tanstack/react-table"
 
 // import { Badge } from "@/registry/new-york/ui/badge"
 // import { Checkbox } from "@/registry/new-york/ui/checkbox"
 
-import { labels, priorities, statuses } from "./data"
-import { Task } from "./data"
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
+import {labels, statuses} from "./data"
+import {Session} from "./data"
+import {DataTableColumnHeader} from "./data-table-column-header"
+import {DataTableRowActions} from "./data-table-row-actions"
 import {Checkbox} from "@/components/ui/checkbox.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Session>[] = [
     {
         id: "select",
-        header: ({ table }) => (
+        header: ({table}) => (
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
@@ -24,7 +25,7 @@ export const columns: ColumnDef<Task>[] = [
                 className="translate-y-[2px]"
             />
         ),
-        cell: ({ row }) => (
+        cell: ({row}) => (
             <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -37,19 +38,19 @@ export const columns: ColumnDef<Task>[] = [
     },
     {
         accessorKey: "id",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Task" />
+        header: ({column}) => (
+            <DataTableColumnHeader column={column} title="Session"/>
         ),
-        cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+        cell: ({row}) => <div className="w-[80px]">{row.getValue("id")}</div>,
         enableSorting: false,
         enableHiding: false,
     },
     {
         accessorKey: "title",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Title" />
+        header: ({column}) => (
+            <DataTableColumnHeader column={column} title="Title"/>
         ),
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const label = labels.find((label) => label.value === row.original.label)
 
             return (
@@ -64,10 +65,10 @@ export const columns: ColumnDef<Task>[] = [
     },
     {
         accessorKey: "status",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Status" />
+        header: ({column}) => (
+            <DataTableColumnHeader column={column} title="Status"/>
         ),
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const status = statuses.find(
                 (status) => status.value === row.getValue("status")
             )
@@ -79,7 +80,7 @@ export const columns: ColumnDef<Task>[] = [
             return (
                 <div className="flex w-[100px] items-center">
                     {status.icon && (
-                        <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                        <status.icon className="mr-2 h-4 w-4 text-muted-foreground"/>
                     )}
                     <span>{status.label}</span>
                 </div>
@@ -91,24 +92,20 @@ export const columns: ColumnDef<Task>[] = [
     },
     {
         accessorKey: "priority",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Priority" />
+        header: ({column}) => (
+            <DataTableColumnHeader column={column} title="Study"/>
         ),
-        cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            )
-
-            if (!priority) {
-                return null
-            }
+        cell: ({row}) => {
+            const idVal = row.getValue("id")
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
+                    <Button
+                        onClick={() => console.log(idVal)}
+                        className="h-8 px-2 lg:px-3 mr-2"
+                    >
+                        Study
+                    </Button>
                 </div>
             )
         },
@@ -118,6 +115,6 @@ export const columns: ColumnDef<Task>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => <DataTableRowActions row={row} />,
+        cell: ({row}) => <DataTableRowActions row={row}/>,
     },
 ]

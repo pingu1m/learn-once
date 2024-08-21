@@ -16,17 +16,17 @@ import { Row } from "@tanstack/react-table"
 //     DropdownMenuTrigger,
 // } from "@/registry/new-york/ui/dropdown-menu"
 
-import { labels } from "./data"
-import { taskSchema } from "./data"
+// import { labels } from "./data"
+// import { sessionSchema } from "./data"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuRadioGroup, DropdownMenuRadioItem,
+    // DropdownMenuRadioGroup, DropdownMenuRadioItem,
     DropdownMenuSeparator, DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
+    // DropdownMenuSub,
+    // DropdownMenuSubContent,
+    // DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -35,10 +35,12 @@ interface DataTableRowActionsProps<TData> {
     row: Row<TData>
 }
 
+// @ts-ignore
 export function DataTableRowActions<TData>({
                                                row,
                                            }: DataTableRowActionsProps<TData>) {
-    const task = taskSchema.parse(row.original)
+    // const session = sessionSchema.parse(row.original)
+    // console.log(row)
 
     return (
         <DropdownMenu>
@@ -59,7 +61,7 @@ export function DataTableRowActions<TData>({
                 {/*<DropdownMenuSub>*/}
                 {/*    <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>*/}
                 {/*    <DropdownMenuSubContent>*/}
-                {/*        <DropdownMenuRadioGroup value={task.label}>*/}
+                {/*        <DropdownMenuRadioGroup value={session.label}>*/}
                 {/*            {labels.map((label) => (*/}
                 {/*                <DropdownMenuRadioItem key={label.value} value={label.value}>*/}
                 {/*                    {label.label}*/}

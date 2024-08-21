@@ -3,7 +3,6 @@ import {NavLink} from "react-router-dom";
 import {cn} from "@/lib/utils"
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button, buttonVariants} from "@/components/ui/button.tsx";
-import {apiCall} from "@/util.ts";
 
 interface NavProps {
     isCollapsed: boolean

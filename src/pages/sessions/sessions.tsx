@@ -7,11 +7,21 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx
 import {Input} from "@/components/ui/input.tsx";
 // import {Payment, columns} from "@/pages/sessions/columns.tsx";
 import {useEffect, useState} from "react";
-import {Payment, columns} from "@/pages/sessions/data_table/columns.tsx";
-import { DataTable } from "@/pages/sessions/data_table/data-table";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {columns} from "@/pages/sessions/data_table/columns.tsx";
+import {DataTable} from "@/pages/sessions/data_table/data-table";
+import {ScrollArea} from "@/components/ui/scroll-area";
 import {z} from "zod";
-import {taskSchema} from "@/pages/sessions/data_table/data.tsx";
+import {sessionSchema} from "@/pages/sessions/data_table/data.tsx";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {NotesTable} from "@/pages/notes/table/data-table.tsx";
+import {useNotes} from "@/components/notes/noteApi.ts";
+import {notes_columns} from "@/pages/notes/table/columns.tsx";
+import {AccountSwitcher} from "@/pages/notes/account-switcher.tsx";
+import {accounts} from "@/data.tsx";
+// import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+// import {Label} from "@/components/ui/label";
+// import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
 
 // import { useMail } from "@/app/(app)/examples/mail/use-mail"
 // async function getData(): Promise<Payment[]> {
@@ -27,19 +37,58 @@ import {taskSchema} from "@/pages/sessions/data_table/data.tsx";
 //     ]
 // }
 
-async function getTasks() {
+async function getSessions() {
     const response = await fetch('/tasks.json');
 
     if (!response.ok) {
         throw new Error(`Failed to fetch tasks: ${response.statusText}`);
     }
 
-    const tasks = await response.json();
+    const sessions = await response.json();
 
-    return z.array(taskSchema).parse(tasks)
+    return z.array(sessionSchema).parse(sessions)
 }
 
 interface MailProps {
+}
+
+const StudyCard = () => {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Study session</CardTitle>
+                <CardDescription>
+                    Study your notes.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div
+                    className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
+                >
+                    <div className="flex flex-col items-center gap-1 text-center">
+                        <h3 className="text-2xl font-bold tracking-tight">
+                            You have no products
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                            You can start selling as soon as you add a product.
+                        </p>
+                        <Button className="mt-4">FLIP</Button>
+                    </div>
+                </div>
+
+            </CardContent>
+            <CardFooter className="justify-center border-t p-4">
+                <Button className="mt-4 mr-2 ">Easy</Button>
+                <Button className="mt-4 mr-2 ">Hard</Button>
+                <Button className="mt-4 mr-2 ">Skip</Button>
+                {/*<Button size="sm" variant="ghost" className="gap-1">*/}
+                {/*    <PlusCircle className="h-3.5 w-3.5"/>*/}
+                {/*    Add Variant*/}
+                {/*</Button>*/}
+            </CardFooter>
+        </Card>
+
+    )
 }
 
 export function Sessions({}: MailProps) {
@@ -47,13 +96,15 @@ export function Sessions({}: MailProps) {
     const defaultLayout = [265, 440, 655]
     // const data = await getData()
     const [data, setData] = useState([])
+    const {data: notes, isLoading, isError} = useNotes();
 
     useEffect(() => {
         const fetchData = async () => {
             // const temp = await getData()
-            const temp = await getTasks()
+            const temp = await getSessions()
             setData(temp)
         }
+        // setData(notes);
 
         fetchData().catch(console.error);
     }, []);
@@ -64,7 +115,7 @@ export function Sessions({}: MailProps) {
             <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
                 <Tabs defaultValue="all">
                     <div className="flex items-center px-4 py-2">
-                        <h1 className="text-xl font-bold">Sessions</h1>
+                        <AccountSwitcher isCollapsed={false} />
                         <TabsList className="ml-auto">
                             <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">
                                 All
@@ -99,6 +150,8 @@ export function Sessions({}: MailProps) {
             </ResizablePanel>
             <ResizableHandle withHandle/>
             <ResizablePanel defaultSize={defaultLayout[2]}>
+                {/*<StudyCard/>*/}
+                {notes && <NotesTable columns={notes_columns} data={notes} />}
             </ResizablePanel>
         </>
     )
