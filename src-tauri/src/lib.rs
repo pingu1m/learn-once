@@ -5,7 +5,7 @@ pub mod database;
 
 use std::time::Duration;
 use crud::data::*;
-use crud::models::{card::*, note::*, session::*};
+use crud::models::{note::*, session::*};
 
 use tauri::{AppHandle, Manager, State};
 use tokio::time::sleep;
@@ -45,15 +45,10 @@ pub async fn run() {
                 note_delete,
                 note_select,
 
-                session_insert,
-                session_update,
-                session_delete,
+                // session_insert,
+                // session_update,
+                // session_delete,
                 session_select,
-
-                card_insert,
-                card_update,
-                card_delete,
-                card_select,
             ]
         )
         .build(tauri::generate_context!())

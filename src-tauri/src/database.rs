@@ -19,6 +19,7 @@ pub async fn setup_db(app: &App) -> Db {
         }
     };
     path.push("db.sqlite");
+    dbg!(&path);
     let result = OpenOptions::new().create_new(true).write(true).open(&path);
     match result {
         Ok(_) => println!("database file created"),

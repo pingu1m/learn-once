@@ -1,23 +1,20 @@
 use sqlx::{FromRow, Row, Executor};
 use serde::{Deserialize, Serialize};
-use ts_rs::TS;
 use crate::state::AppState;
 
-#[derive(TS, Serialize, Deserialize, Clone, FromRow, Debug)]
-#[ts(export, rename_all="camelCase")]
-#[ts(export_to = "../../../src/bindings/note.ts")]
+#[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Note {
-    id: String,  // UUID as a String
-    title: String,
-    email: String,
-    subject: String,
-    text: String,
-    date: String,  // ISO 8601 format string
-    favorite: bool,
-    labels: String,  // Vector of strings
-    language: String,
-    updated_at: String,
-    created_at: String,
+    pub id: String,  // UUID as a String
+    pub title: String,
+    pub email: String,
+    pub subject: String,
+    pub text: String,
+    pub date: String,  // ISO 8601 format string
+    pub favorite: bool,
+    pub labels: String,  // Vector of strings
+    pub language: String,
+    pub updated_at: String,
+    pub created_at: String,
 }
 
 #[tauri::command]
