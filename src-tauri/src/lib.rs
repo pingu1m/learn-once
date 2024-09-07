@@ -49,6 +49,10 @@ pub async fn run() {
                 // session_update,
                 // session_delete,
                 session_select,
+                session_delete,
+                create_study_session,
+                start_study_session,
+                finish_study_session,
             ]
         )
         .build(tauri::generate_context!())

@@ -39,17 +39,21 @@ pub async fn setup_db(app: &App) -> Db {
         .max_lifetime(None)
         .idle_timeout(None)
         // .acquire_timeout(Duration::from_secs(5))
-        // .connect_with(
-        //     // SqliteConnectOptions::from_str(db_file)?
-        //     SqliteConnectOptions::new()
-        //         .auto_vacuum(SqliteAutoVacuum::Incremental)
-        //         //     .create_if_missing(true)
-        //         .journal_mode(SqliteJournalMode::Wal)
-        //         .filename(path.to_str().unwrap()),
-        // )
+        .connect_with(
+            //     // SqliteConnectOptions::from_str(db_file)?
+            SqliteConnectOptions::new()
+                .auto_vacuum(SqliteAutoVacuum::Incremental)
+                .create_if_missing(true)
+                .journal_mode(SqliteJournalMode::Wal)
+                .filename(path.to_str().unwrap()),
+        )
         // // .connect()
-        .connect(path.to_str().unwrap())
+        // .connect(path.to_str().unwrap())
         .await.unwrap();
+
+    dbg!(path.to_str().unwrap());
+
     sqlx::migrate!("./migrations").run(&db).await.unwrap();
+
     db
 }
