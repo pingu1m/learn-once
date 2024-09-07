@@ -14,12 +14,14 @@ const useMonacoVimMode = (editor: monaco.editor.IStandaloneCodeEditor) => {
             id: "vim-mode",
             label: "Vim Mode",
             keybindings: [
+                // @ts-ignore
                 monaco.KeyMod.chord(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_K, monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_V), //tslint:disable-line
             ],
             contextMenuGroupId: "navigation",
             contextMenuOrder: 1.5,
             run: () => {
                 if (vimMode) {
+                    // @ts-ignore
                     vimMode.dispose();
                 }
                 setVimMode(initVimMode(editor));
@@ -28,6 +30,7 @@ const useMonacoVimMode = (editor: monaco.editor.IStandaloneCodeEditor) => {
 
         return () => {
             if (vimMode) {
+                // @ts-ignore
                 vimMode.dispose();
             }
         };
