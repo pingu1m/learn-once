@@ -7,29 +7,26 @@ This template should help get you started developing with Tauri, React and Types
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
 Template created! To get started run:
-  cd learn-once
-  npm install
-  npm run tauri android init
-  npm run tauri ios init
+cd learn-once
+npm install
+npm run tauri android init
+npm run tauri ios init
 
 For Desktop development, run:
-  npm run tauri dev
+npm run tauri dev
 
 For Android development, run:
-  npm run tauri android dev
+npm run tauri android dev
 
 For iOS development, run:
-  npm run tauri ios dev
+npm run tauri ios dev
 
+# TODO:
 
-
-
-
-
-
-
-
-
+- publish tauri package
+- website For Learn Once app
+- document most important
+- review cards study session logic and address bugs
 
 yes | npx shadcn-ui@latest add calendar;
 yes | npx shadcn-ui@latest add select;
