@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" style="--ccm--scrollbar-width: 0px; --ccm--scrollbar-height: 0px;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script async="" src="assets/clarity.js"></script>
+    <script async="" src="assets/187024866"></script>
+    <script src="assets/bat.js" async=""></script>
+    <script src="assets/app.js" referrerpolicy="origin">
+    </script>
+    <link href="assets/app.css" rel="stylesheet" type="text/css">
+    <title>UMLBoard - a lightweight UML class diagram designer</title>
+    <link rel="icon" type="image/png" href="https://www.umlboard.com/images/umlboard-favicon.png" sizes="96x96">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="assets/body.css">
+    <link rel="stylesheet" type="text/css" href="assets/faq.css">
+    <link rel="stylesheet" type="text/css" href="assets/landing-page.css">
+    <link rel="stylesheet" type="text/css" href="assets/benefits.css">
+    <link rel="stylesheet" type="text/css" href="assets/title-bar.css">
+    <link rel="stylesheet" type="text/css" href="assets/feature2.css">
+    <link rel="stylesheet" type="text/css" href="assets/video.css">
+    <link rel="stylesheet" type="text/css" href="assets/action-button.css">
+    <link rel="stylesheet" type="text/css" href="assets/contact.css">
+    <link rel="stylesheet" type="text/css" href="assets/footer.css">
+    <link rel="stylesheet" type="text/css" href="assets/back-to-top.css">
+    <link rel="stylesheet" type="text/css" href="assets/hamburger-menu.css">
+    <link rel="stylesheet" type="text/css" href="assets/design-patterns.css">
+    <link rel="stylesheet" href="assets/normalize.css">
+    <link rel="stylesheet" href="assets/skeleton.css">
+    <link rel="stylesheet" href="assets/all.min.css">
+    <meta name="description"
+          content="An easy-to-use designer for creating UML class diagrams with a nice hand-drawn looking style.">
+    <meta name="keywords" content="UML, class diagram, domain model, hand-drawn, whiteboard, diagram designer">
+    <meta name="author" content="Patric Genfer">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@UMLBoard">
+    <meta name="twitter:creator" content="@UMLBoard">
+    <meta property="og:url" content="www.umlboard.com">
+    <meta property="twitter:description"
+          content="UMLBoard is a lightweight UML class designer for creating beautiful hand-drawn looking class diagrams.">
+    <meta property="og:description"
+          content="UMLBoard is a lightweight UML class designer for creating beautiful hand-drawn looking class diagrams.">
+    <meta name="twitter:title" content="UMLBoard">
+    <meta property="og:title" content="UMLBoard">
+    <meta name="twitter:image" content="https://www.umlboard.com/images/social-card.png">
+    <meta property="og:image" content="https://www.umlboard.com/images/social-card.png">
+    <meta name="twitter:image:alt" content="UMLBoard Logo">
+    <script async="" src="assets/js"></script>
+    <link rel="prefetch" as="fetch" crossorigin="anonymous"
+          href="https://cloud.ccm19.de/widget/details?apiKey=0750cd77935bf9a307199c86ec78eb6712c9b50f19fc6248&amp;domain=61eb24c0993e1e4a412354c0&amp;gen=2&amp;theme=61ec41ff74fc01526421ef13&amp;lang=en_US&amp;v=1724338226"
+          id="ccm-prefetch--detail-dialog">
+    <script src="assets/187024866.js" type="text/javascript" async="" data-ueto="ueto_c8267b4147"></script>
+</head>
+<body class="page" data-new-gr-c-s-check-loaded="14.1193.0" data-gr-ext-installed="">
+<div class="landing-page">
+    <div class="hamburger-menu">
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <input type="checkbox" class="navigation-checkbox"
+                       id="hamburger-navar-checkbox"
+                       onclick="navbarCheckboxClicked()">
+                <div class="hamburger-lines"><span class="line line1"></span> <span class="line line2"></span> <span
+                        class="line line3"></span></div>
+                <ul class="menu-items" id="menu-items">
+                    <li><a href="#benefits" onclick="menuItemClicked()">Benefits</a></li>
+                    <li><a href="https://www.umlboard.com/#features" onclick="menuItemClicked()">Features</a></li>
+                    <li><a href="https://www.umlboard.com/#video" onclick="menuItemClicked()">Video</a></li>
+                    <li><a href="https://www.umlboard.com/#faq" onclick="menuItemClicked()">FAQ</a></li>
+                    <li><a href="https://www.umlboard.com/design-patterns" onclick="menuItemClicked()">Design
+                        Patterns</a></li>
+                    <li><a href="https://www.umlboard.com/docs" onclick="menuItemClicked()">Docs</a></li>
+                    <li><a href="https://www.umlboard.com/blog" onclick="menuItemClicked()">Blog</a></li>
+                    <li><a href="https://umlboard.myspreadshop.com/" onclick="menuItemClicked()">Merchandise</a></li>
+                    <li><a href="https://www.umlboard.com/#contact" onclick="menuItemClicked()">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="title-navigation"><a class="logo-navigation-link" href="https://www.umlboard.com/">
+        <div class="title-logo-container"><img
+                src="assets/umlboard-logo.png"
+                class="title-logo-icon" alt="The UMLBoard logo">
+            <div class="title-app-name"> UMLBoard</div>
+        </div>
+    </a>
+        <div class="title-navigation-container">
+            <div class="title-navigation-list"><a href="https://www.umlboard.com/#benefits" class="navigation-link">Benefits</a>
+                <a href="https://www.umlboard.com/#features" class="navigation-link">Features</a> <a
+                        href="https://www.umlboard.com/#video" class="navigation-link">Video</a> <a
+                        href="https://www.umlboard.com/#faq" class="navigation-link">FAQ</a> <a
+                        href="https://www.umlboard.com/design-patterns/" class="navigation-link">Design Patterns</a> <a
+                        href="https://www.umlboard.com/docs/" class="navigation-link">Docs</a> <a
+                        href="https://www.umlboard.com/blog/" class="navigation-link">Blog</a> <a
+                        href="https://umlboard.myspreadshop.com/" class="navigation-link">Merchandise</a> <a
+                        href="https://www.umlboard.com/#contact" class="navigation-link">Contact</a></div>
+        </div>
+    </div>
+    <div class="landing-main">
+        <div class="landing-content">
+            <div class="landing-content-left">
+                <div class="hero-text-container">
+                    <div class="hero-title"> Create fancy <span class="hero-title-marked">UML</span> class diagrams.
+                    </div>
+                </div>
+                <div class="hero-description-container">
+                    <div class="hero-subtitle"> A lightweight UML class designer with a clear design and easy to
+                        use.<br> Just focus on your ideas and start drawing right away.
+                    </div>
+                </div>
+                <div class="call-to-action"><a href="https://apps.apple.com/app/umlboard/id1579236127"> <img
+                        src="assets/mac-app-store-button.svg"
+                        class="store-button"> </a> <a
+                        href="https://www.microsoft.com/store/apps/9PHX7LDCKKVQ?cid=storebadge&amp;ocid=badge"> <img
+                        src="assets/win-app-store-button.svg"
+                        class="store-button"> </a> <a href="https://marketplace.unlock.sh/item/umlboard"> <img
+                        src="assets/linux-download-button.svg"
+                        class="store-button"> </a></div>
+            </div>
+            <div class="landing-content-right">
+                <div class="hero-image-frame">
+                    <div class="fade hero-image hero-image-0 hero-image-background hide"></div>
+                    <div class="fade hero-image hero-image-1 hero-image-background hide"></div>
+                    <div class="fade hero-image hero-image-2 hero-image-background"></div>
+                    <div class="fade hero-image hero-image-3 hero-image-background hide"></div>
+                    <a class="prev" onclick="plusSlides(-1,[HERO_IMAGE])">❮</a> <a class="next"
+                                                                                   onclick="plusSlides(1,[HERO_IMAGE])">❯</a>
+                </div>
+                <div class="hero-image-slider"><span class="hero-image-active hero-image-dot"
+                                                     onclick="changeCurrentSlide(0,[HERO_IMAGE],!1)"></span> <span
+                        class="hero-image-dot" onclick="changeCurrentSlide(1,[HERO_IMAGE],!1)"></span> <span
+                        class="hero-image-dot hero-image-dot-active"
+                        onclick="changeCurrentSlide(2,[HERO_IMAGE],!1)"></span> <span class="hero-image-dot"
+                                                                                      onclick="changeCurrentSlide(3,[HERO_IMAGE],!1)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="benefit-page" id="benefits">
+    <div class="benefit-container">
+        <div class="benefit-left-area"><h1 class="benefit-headline"> Focus on ideas, not details. </h1>
+            <div class="benefit-description-container">
+                <article class="benefit-description">
+                    <div class="benefit-number">01</div>
+                    <div class="benefit-description-title"><span class="highlight-0">Save time</span></div>
+                    <div class="benefit-description-text"> Documenting code is important but comes with the cost of
+                        maintaining your diagrams. Thanks to its lightweight and intuitive user interface, UMLBoard lets
+                        you create and update your architecture diagrams fast and easily, without any additional setup
+                        or configuration required. <br>Just start drawing right away.
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="benefit-right-area">
+            <article class="benefit-description">
+                <div class="benefit-number">02</div>
+                <div class="benefit-description-title"><span class="highlight-1">Communicate Ideas</span></div>
+                <div class="benefit-description-text"> UML diagrams are often about illustrating essential aspects of
+                    your design. Use UMLBoard to create conceptual diagrams and to share your ideas with other
+                    stakeholders.
+                </div>
+            </article>
+            <article class="benefit-description">
+                <div class="benefit-number">03</div>
+                <div class="benefit-description-title"><span class="highlight-2">Catch Attention</span></div>
+                <div class="benefit-description-text"> Whether you want to add documentation to your code or illustrate
+                    your architecture for an assignment, a research paper, or your personal development blog: UMLBoard's
+                    hand-drawn styled diagrams are real eye-catchers!
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+<section class="feature2-page light-theme" id="features">
+    <div class="feature2-content">
+        <div class="box-shadow-light-theme feature2-image-container">
+            <div class="fade feature2-image feature2-image-0 feature2-image-container-background-light-theme"></div>
+            <div class="fade feature2-image feature2-image-1 feature2-image-container-background-light-theme hide"></div>
+            <div class="fade feature2-image feature2-image-2 feature2-image-container-background-light-theme hide"></div>
+            <div class="fade feature2-image feature2-image-3 feature2-image-container-bakground-dark-theme hide"></div>
+        </div>
+        <article class="feature2-description-container">
+            <div class="feature2-title-container"><h1 class="fade feature2-title feature2-title-0">EASY TO USE</h1>
+                <h1 class="fade feature2-title feature2-title-1 hide">It's Real UML</h1>
+                <h1 class="fade feature2-title feature2-title-2 hide">Powerful Image Export</h1>
+                <h1 class="fade feature2-title feature2-title-3 hide">Color Themes</h1>
+                <div class="feature2-navigation"><a class="feature2-prev"
+                                                    onclick="plusSlides(-1,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE])">‹</a>
+                    <a class="feature2-next"
+                       onclick="plusSlides(1,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE])">›</a></div>
+            </div>
+            <div class="feature2-description feature2-description-0"> We believe that drawing UML diagrams is just one
+                of many tasks in software development and should therefore be as easily accessible as possible.<br><br>
+                That's why, unlike many complex UML tools, UMLBoard offers a clean and lightweight user
+                interface.<br><br> All essential functions are just a click away - no need to work your way through
+                multiple dialogs that distract you from your real task - bringing your ideas to life.
+            </div>
+            <div class="fade feature2-description feature2-description-1 hide"> Unlike free-form drawings, semantically
+                correct UML diagrams often require you to comply with specific constraints or rules.<br><br> UMLBoard
+                helps you follow these regulations without being too restrictive and ensures your diagram stays
+                valid.<br><br> If you need more flexibility in your diagram than UML would provide, you're always free
+                to enter custom text and elements whenever you need them.
+            </div>
+            <div class="fade feature2-description feature2-description-2 hide"> UML diagrams rarely stand alone: they
+                are often part of larger documentation or specifications or illustrate an architectural concept in a
+                blog or research paper.<br><br> Therefore, UMLBoard offers several image export options for embedding
+                your drawings into other media. Whether you prefer PNG graphics in different resolutions or scalable
+                vector graphics for your website or blog, it's totally up to you.
+            </div>
+            <div class="fade feature2-description feature2-description-3 hide"> Oh, and did we also mention that it
+                supports dark and light color themes?<br><br> If you prefer blackboards over whiteboards, you should
+                definitely try the dark mode!
+            </div>
+        </article>
+    </div>
+    <div class="feature2-slider"><span class="feature2-description-dot feature2-description-dot-active"
+                                       onclick="changeCurrentSlides(0,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE],!1)"></span>
+        <span class="feature2-description-dot"
+              onclick="changeCurrentSlides(1,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE],!1)"></span> <span
+                class="feature2-description-dot"
+                onclick="changeCurrentSlides(2,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE],!1)"></span> <span
+                class="feature2-description-dot"
+                onclick="changeCurrentSlides(3,[FEATURE2_DESCRIPTION,FEATURE2_TITLE,FEATURE2_IMAGE],!1)"></span></div>
+</section>
+<div class="video-page" id="video">
+    <iframe class="video-iframe" width="800px" height="450px"
+            src="assets/2YgiiNp927Q.html"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen=""></iframe>
+</div>
+<section class="action-button-page" id="action-button">
+    <div class="action-text"> One price, no subscription required.<br> Get it now, for Mac, Windows and Linux.</div>
+    <div class="call-to-action"><a href="https://apps.apple.com/app/umlboard/id1579236127"> <img
+            src="assets/mac-app-store-button.svg"
+            class="store-button"> </a> <a
+            href="https://www.microsoft.com/store/apps/9PHX7LDCKKVQ?cid=storebadge&amp;ocid=badge"> <img
+            src="assets/win-app-store-button.svg"
+            class="store-button"> </a> <a href="https://marketplace.unlock.sh/item/umlboard"> <img
+            src="assets/linux-download-button.svg"
+            class="store-button"> </a></div>
+    <div class="testimonial-container">
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">Excellent!</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            Great app, simple and effective. I have been using for keeping notes when im reading. Only thing that im
+            lacking is the ability to have multiple diagrams open at the same time. Keep up the good work.
+        </article>
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">A lovely little app</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            Hold control, tap anywhere, and you get a thoughtfully designed modal to add an object. And of course a
+            simple drag to connect objects. It's limited on features, and the results look as disposable as an ink
+            drenched napkin. Exactly what I wanted!
+        </article>
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">Delightful App</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            Delightful App. Painless, intuitive UI. Replaces my "Where do I have my paper scribbles from last time?"
+            Makes UML Class Diagramming fun.
+        </article>
+    </div>
+    <div class="testimonial-container">
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">I love it.</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            It's a great app (so great in fact, that I immediately bought it on the Windows Store as well). This UML app
+            has just the right amount of depth to quickly set up a model or communicate stuff to coworkers.
+        </article>
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">Simple and flexible</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            It has been a surprise. The tool is simple in concept and options but yet it is very flexible. It enables me
+            to draw complex diagrams easily and quickly.
+        </article>
+        <article class="testimonial-item">
+            <div class="testimonial-rating"><span class="testimonial-title">Great App</span>
+                <div><span class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span> <span
+                        class="checked fa fa-star testimonial-star"></span></div>
+            </div>
+            Can you now make a similar for sequence diagrams :)
+        </article>
+    </div>
+    <br></section>
+<section class="faq"><h1 id="faq" class="title">Frequently asked questions</h1>
+    <div class="question-first-row">
+        <div class="question-area">
+            <div class="question"><h2 class="question-title">What is this tool actually good for?</h2>
+                <div class="question-text"> UMLBoard is a lightweight UML class designer for drawing static class or
+                    domain diagrams. It supports full inline-editing and provides various image export functions. It's
+                    ideal for documenting your source code or discussing domain concepts with other stakeholders.
+                </div>
+            </div>
+            <div class="question"><h2 class="question-title">There are plenty of UML designers available, what's so
+                special about this one?</h2>
+                <div class="question-text"> While many full blown UML designers can be quite complex to use, UMLBoard's
+                    focus lays on drawing and editing expressive UML static class diagrams. Therefore its user interface
+                    is much more streamlined and easier to use.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="question-second-row">
+        <div class="question-area">
+            <div class="question"><h2 class="question-title">How often will there be updates?</h2>
+                <div class="question-text"> New feature updates are planned around every two month, and there are quite
+                    some features and ideas in the pipeline. And if you need any functionality or miss any feature, just
+                    let us know and we will do our best to add it.
+                </div>
+            </div>
+            <div class="question"><h2 class="question-title">Why isn't the app for free?</h2>
+                <div class="question-text"> Developing an app takes a considerable amount of time and resources, but
+                    compared to similar apps, UMLBoard uses a very fair one-time pricing model without any monthly
+                    subscription fees. Just pay once and use the app as long as you want.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="question-call-to-action">
+        <div class="question-call-to-action-title">Wait, I have another question!</div>
+        <span class="question-call-to-action-subtext">Sure, we've got you covered, please use the&nbsp;<a
+                href="https://www.umlboard.com/#contact" class="faq-contact-link">Contact</a>&nbsp;form to send your question.</span>
+    </div>
+</section>
+<section class="contact" id="contact"><h1 class="contact-title" id="contact"> Get in touch </h1>
+    <div class="contact-icons"><a href="mailto:contact@umlboard.com" class="email-link link normal-text"
+                                  title="send us an email"> <i class="fa-2x fa-envelope far"></i> </a> <a
+            href="https://www.facebook.com/pages/category/Software/UMLBoard-100757479056963/" target="_blank"
+            class="email-link link normal-text" title="visit us on Facebook"> <i class="fa-2x fa-facebook fab"></i> </a>
+        <a href="https://www.linkedin.com/company/umlboard" class="email-link link normal-text" target="_blank"
+           title="visit us on LinkedIn"> <i class="fa-2x fa-linkedin fab"></i> </a> <a
+                href="https://twitter.com/umlboard" class="email-link link normal-text" target="_blank"
+                title="follow us on Twitter"> <i class="fa-2x fa-twitter fab"></i> </a> <a
+                href="https://www.youtube.com/channel/UCegDQVTwoYd1XeWMTVUzYhg" class="email-link link normal-text"
+                target="_blank" title="follow us on Youtube"> <i class="fa-2x fa-youtube fab"></i> </a></div>
+    <div class="container">
+        <form class="form-top-margin">
+            <div class="row">
+                <div class="columns six"><input type="text" id="name" name="name" placeholder="your name (optional)"
+                                                class="u-full-width" tabindex="1"></div>
+                <div class="columns six"><input type="text" id="title" name="title"
+                                                placeholder="the title of your message (optional)" class="u-full-width"
+                                                tabindex="3"></div>
+            </div>
+            <div class="row">
+                <div class="columns fixed-column six"><input type="text" id="email" name="email"
+                                                             placeholder="your email (optional)" class="u-full-width"
+                                                             tabindex="2">
+                    <div class="email-remark">(but if you want to get a response, you should definitely provide your
+                        email)
+                    </div>
+                    <div class="hidden reply-message success" id="reply-message-success"><i
+                            class="fa-check-circle far"></i> <span
+                            id="reply-message-success-content"><span> </span></span></div>
+                    <div class="error hidden reply-message" id="reply-message-error"><i class="fa-times-circle far"></i>
+                        <span id="reply-message-error-content">this is an error message<span> </span></span></div>
+                    <div class="hidden reply-message" id="sending-animation"><span id="sending-animation-content"
+                                                                                   class="loading">Sending<span> </span></span>
+                    </div>
+                </div>
+                <div class="columns fixed-column six"><textarea id="message" name="message" rows="5"
+                                                                placeholder="your message text (this one is required!)"
+                                                                class="text-area u-full-width" tabindex="4"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="flex-horizontal-center margin-top-large-1"><input id="send-button" type="button"
+                                                                              onclick="sendContactMessage()"
+                                                                              value="Send Message"
+                                                                              class="accent normal-text"></div>
+            </div>
+        </form>
+    </div>
+</section>
+<footer class="footer">
+    <div class="impressum">
+        <div class="impressum-right">
+            <div class="impressum-text"><a href="https://www.umlboard.com/privacy-policy/terms-of-service.html"
+                                           class="impressum-link">Terms of Service</a></div>
+            <div class="impressum-text"><a href="https://www.umlboard.com/privacy-policy/website-privacy-policy.html"
+                                           class="impressum-link">Privacy Policy</a></div>
+            <div class="impressum-text"><a href="https://www.umlboard.com/#" onclick="return CCM.openWidget(),!1"
+                                           class="impressum-link">Cookie Settings</a></div>
+            <div class="impressum-text"><a href="https://www.umlboard.com/privacy-policy/impressum.html"
+                                           class="impressum-link">Impressum</a></div>
+            <div class="impressum-copyright impressum-text"> © Copyright 2021 - 2023, Patric Genfer</div>
+        </div>
+    </div>
+</footer>
+<button onclick="topFunction()" id="myBtn" title="Go to top" style="display: none;"><i
+        class="fa-2x fa-chevron-up fas"></i></button>
+<script>function gtag() {
+    dataLayer.push(arguments)
+}
+
+function menuItemClicked() {
+    const e = document.getElementById("menu-items"), t = document.getElementById("hamburger-navar-checkbox");
+    t.checked = !t.checked, e.style.visibility = "hidden"
+}
+
+function navbarCheckboxClicked() {
+    const e = document.getElementById("menu-items"), t = document.getElementById("hamburger-navar-checkbox");
+    e.style.visibility = t.checked ? "visible" : "hidden"
+}
+
+window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "G-ZFD4YYXJFN"), function (e, t, n, s, o) {
+    var a, c, l;
+    e[o] = e[o] || [], a = function () {
+        var t = {ti: "187024866"};
+        t.q = e[o], e[o] = new UET(t), e[o].push("pageLoad")
+    }, (c = t.createElement(n)).src = "//bat.bing.com/bat.js", c.async = 1, c.onload = c.onreadystatechange = function () {
+        var e = this.readyState;
+        e && "loaded" !== e && "complete" !== e || (a(), c.onload = c.onreadystatechange = null)
+    }, (l = t.getElementsByTagName(n)[0]).parentNode.insertBefore(c, l)
+}(window, document, "script", 0, "uetq");
+const FEATURE2_DESCRIPTION = "feature2-description", FEATURE2_IMAGE = "feature2-image",
+    FEATURE2_TITLE = "feature2-title", HERO_IMAGE = "hero-image", classNameSettings = {
+        [FEATURE2_DESCRIPTION]: {index: 0, autoSlideShow: !1, shouldSlide: !1, func: void 0},
+        [FEATURE2_IMAGE]: {index: 0, autoSlideShow: !1, shouldSlide: !1, func: void 0},
+        [FEATURE2_TITLE]: {index: 0, autoSlideShow: !1, shouldSlide: !1, func: switchColorMode},
+        [HERO_IMAGE]: {index: 0, autoSlideShow: !0, shouldSlide: !0, func: void 0}
+    };
+let currentIndex = 0, autoSlideShow = !0;
+
+function plusSlides(e, t) {
+    const n = document.getElementsByClassName(t[0]).length;
+    t.forEach((t => {
+        let s = classNameSettings[t].index + e;
+        s === n && (s = 0), -1 === s && (s = n - 1), changeCurrentSlide(s, t, !1)
+    }))
+}
+
+function changeCurrentSlides(e, t, n) {
+    t.forEach((t => changeCurrentSlide(e, t, n)))
+}
+
+function changeCurrentSlide(e, t, n) {
+    const s = document.getElementsByClassName(`${t}-${classNameSettings[t].index}`)[0];
+    s.className = s.className + " hide";
+    const o = document.getElementsByClassName(`${t}-${e}`)[0];
+    o.className = o.className.replace(" hide", ""), currentIndex = e;
+    Array.from(document.getElementsByClassName(`${t}-dot`)).forEach(((n, s) => {
+        s !== e ? n.classList.remove(`${t}-dot-active`) : n.classList.add(`${t}-dot-active`)
+    }));
+    const a = classNameSettings[t].func;
+    a && a(e), classNameSettings[t].index = e, classNameSettings[t].autoSlideShow = n, !n && classNameSettings[t].shouldSlide && setTimeout((() => {
+        classNameSettings[t].autoSlideShow = !0
+    }), 7e3)
+}
+
+function startImageSlideShow(e) {
+    setInterval((() => {
+        e.forEach((e => {
+            if (!classNameSettings[e].autoSlideShow) return;
+            const t = document.getElementsByClassName(e).length;
+            let n = classNameSettings[e].index + 1;
+            n === t && (n = 0), changeCurrentSlide(n, e, !0)
+        }))
+    }), 5e3)
+}
+
+function switchColorMode(e) {
+    const t = "dark-theme", n = "light-theme";
+    let s = n, o = t;
+    3 === e ? (s = t, o = n) : (s = n, o = t);
+    const a = document.getElementsByClassName("feature2-page")[0];
+    a.classList.contains(o) && a.classList.remove(o), a.classList.contains(s) || a.classList.add(s);
+    const c = document.getElementsByClassName("feature2-image-container")[0];
+    c.classList.contains(`box-shadow-${o}`) && c.classList.remove(`box-shadow-${o}`), c.classList.contains(`box-shadow-${s}`) || c.classList.add(`box-shadow-${s}`)
+}
+
+async function sendContactMessage() {
+    const e = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            title: document.getElementById("title").value,
+            message: document.getElementById("message").value
+        }, t = {headers: {"content-type": "application/json; charset=UTF-8"}, body: JSON.stringify(e), method: "POST"},
+        n = document.getElementById("sending-animation"), s = document.getElementById("send-button");
+    hideElement(document.getElementById("reply-message-success")), hideElement(document.getElementById("reply-message-error")), showElement(n), s.disabled = !0;
+    const o = await fetch("https://fcqpt9zo9l.execute-api.eu-central-1.amazonaws.com/Production/contact", t);
+    if (hideElement(n), s.disabled = !1, o.ok) {
+        const e = await o.json();
+        showResult(200 === e.statusCode ? "success" : "error", e.body)
+    } else console.log("error")
+}
+
+function showElement(e) {
+    e.classList.remove("hidden")
+}
+
+function hideElement(e) {
+    e.classList.add("hidden")
+}
+
+function showResult(e, t) {
+    showElement(document.getElementById(`reply-message-${e}`));
+    document.getElementById(`reply-message-${e}-content`).innerHTML = t
+}
+
+function hideResult(e) {
+    hideElement(document.getElementById(`reply-message-${e}`))
+}
+
+function scrollFunction() {
+    document.body.scrollTop > 20 || document.documentElement.scrollTop > 20 ? mybutton.style.display = "block" : mybutton.style.display = "none"
+}
+
+function topFunction() {
+    document.body.scrollTop = 0, document.documentElement.scrollTop = 0
+}
+
+window.onload = () => {
+    startImageSlideShow([HERO_IMAGE])
+}, mybutton = document.getElementById("myBtn"), window.onscroll = function () {
+    scrollFunction()
+};</script>
+<div class="ccm-root">
+    <div id="ccm-widget" class="ccm-modal ccm-widget instapaper_ignore ccm--is-blocking ccm--alignment--center"
+         role="dialog" lang="en-US" aria-labelledby="ccm-widget--title" aria-hidden="true" data-nosnippet=""
+         style="display: none;">
+        <div class="ccm-modal-inner">
+            <div class="ccm-modal--header">
+
+                <div class="ccm-widget--language-switch" role="none">
+                    <label for="ccm-widget--language-select" id="ccm-widget--language-select-label" lang="en">Switch
+                        language</label>
+                    <select id="ccm-widget--language-select" class="ccm-widget--language-select ccm--ctrl-init"
+                            aria-labelledby="ccm-widget--language-select-label"
+                            aria-description="Select a language to change the language of this banner. The change becomes effective immediately after selecting the language item.">
+                        <option value="en_US" selected="selected">
+                            English
+                        </option>
+                        <option value="de_DE">
+                            German (Deutsch)
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="ccm-modal--body">
+                <div class="ccm-widget--text cover-scrollbar">
+                    <div class="ccm-inner-overflow" role="document" tabindex="0" aria-labelledby="ccm-widget--title">
+                        <div class="ccm-widget--title ccm--h1" id="ccm-widget--title">We use cookies and other
+                            technologies.
+                        </div>
+                        <div class="ccm-widget--introduction">
+                            <div class="ccm--p">This website uses cookies, web beacons, JavaScript and similar
+                                technologies. I agree that companies associated with this website and third parties
+                                create pseudonymized user profiles for website personalization, market research and
+                                advertising. Although the generated information can be forwarded to third parties, it
+                                can not be combined with personal information. Detailed information and how to withdraw
+                                your consent can be found in the privacy policy of the site.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ccm-widget--buttons" role="group">
+
+                    <button type="button" data-ccm-modal="ccm-control-panel" aria-haspopup="dialog" disabled=""
+                            class="ccm--ctrl-init">Settings
+                    </button>
+                    <button type="button" class="button ccm--save-settings ccm--button-primary ccm--ctrl-init"
+                            data-full-consent="true" disabled="">Accept all
+                    </button>
+                    <button type="button" class="button ccm--decline-cookies ccm--ctrl-init" disabled="">Decline
+                    </button>
+                </div>
+            </div>
+            <div class="ccm-modal--footer" role="group">
+                <div class="ccm-link-container">
+                    <a href="https://www.umlboard.com/privacy-policy/impressum.html">Imprint</a>
+                    <a href="https://www.umlboard.com/">Privacy Policy</a>
+                </div>
+                <div class="ccm-powered-by" role="none">
+                    <a href="https://www.ccm19.de/" rel="sponsored noopener" target="_blank"
+                       title="Cookie Consent Tool / Cookie Consent Manager">
+                        Powered by CCM19
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="ccm-control-panel" class="ccm-modal ccm--is-blocking ccm-control-panel" role="dialog" lang="en-US"
+         aria-hidden="true" aria-labelledby="ccm-control-panel--title" data-nosnippet="" style="display: none;">
+        <div class="ccm-modal-inner">
+            <div class="ccm-modal--header">
+                <div class="ccm-modal--title ccm--h1" id="ccm-control-panel--title">Please select policies to allow
+                </div>
+            </div>
+            <div class="ccm-modal--body">
+
+                <div class="ccm-control-panel--purposes" role="list">
+
+
+                    <div class="ccm-control-panel--purpose mandatory" role="listitem"
+                         aria-labelledby="ccm-control-panel--name--p-41ba25c">
+                        <input type="checkbox" id="ccm-purpose-41ba25c"
+                               class="ccm-checkbox-type--switch ccm-checkbox-align--right ccm--ctrl-init"
+                               data-purpose="41ba25c" data-purpose-mandatory="true" checked="" disabled="">
+                        <label for="ccm-purpose-41ba25c" data-l10n-active="Active" data-l10n-inactive="Inactive"
+                               data-l10n-partial="Partial">
+							<span>
+								<span id="ccm-control-panel--name--p-41ba25c">Technically neccessary</span>
+								(1)
+							</span>
+                        </label>
+                        <button type="button" class="ccm-info-button ccm--ctrl-init" data-ccm-modal="ccm-details"
+                                aria-haspopup="dialog" data-jump-to="ccm-purpose-details-41ba25c" title="Details"
+                                disabled="">?
+                        </button>
+
+
+                        <div class="ccm-control-panel--purpose--description">
+                            Here are all technically necessary scripts, cookies and other elements that are necessary
+                            for the operation of the website or the operator has a legitimate interest under DSGVO Art6,
+                            para. 1.
+                        </div>
+
+                    </div>
+                    <div class="ccm-control-panel--purpose" role="listitem"
+                         aria-labelledby="ccm-control-panel--name--p-a717ff5">
+                        <input type="checkbox" id="ccm-purpose-a717ff5"
+                               class="ccm-checkbox-type--switch ccm-checkbox-align--right ccm--ctrl-init"
+                               data-purpose="a717ff5" data-purpose-mandatory="false">
+                        <label for="ccm-purpose-a717ff5" data-l10n-active="Active" data-l10n-inactive="Inactive"
+                               data-l10n-partial="Partial">
+							<span>
+								<span id="ccm-control-panel--name--p-a717ff5">Measurement</span>
+								(4)
+							</span>
+                        </label>
+                        <button type="button" class="ccm-info-button ccm--ctrl-init" data-ccm-modal="ccm-details"
+                                aria-haspopup="dialog" data-jump-to="ccm-purpose-details-a717ff5" title="Details"
+                                disabled="">?
+                        </button>
+
+
+                        <div class="ccm-control-panel--purpose--description">
+                            For the site, visitors, web page views and various other data are stored anonymously.
+                        </div>
+
+                    </div>
+                    <div class="ccm-control-panel--purpose" role="listitem"
+                         aria-labelledby="ccm-control-panel--name--p-15c61c3">
+                        <input type="checkbox" id="ccm-purpose-15c61c3"
+                               class="ccm-checkbox-type--switch ccm-checkbox-align--right ccm--ctrl-init"
+                               data-purpose="15c61c3" data-purpose-mandatory="false">
+                        <label for="ccm-purpose-15c61c3" data-l10n-active="Active" data-l10n-inactive="Inactive"
+                               data-l10n-partial="Partial">
+							<span>
+								<span id="ccm-control-panel--name--p-15c61c3">Other</span>
+								(2)
+							</span>
+                        </label>
+                        <button type="button" class="ccm-info-button ccm--ctrl-init" data-ccm-modal="ccm-details"
+                                aria-haspopup="dialog" data-jump-to="ccm-purpose-details-15c61c3" title="Details"
+                                disabled="">?
+                        </button>
+
+
+                        <div class="ccm-control-panel--purpose--description">
+                            Here are other scripts and cookies that do not fit any of the above categories.
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="ccm-modal--footer" role="group">
+                <button type="button" class="button ccm-modal--close ccm--ctrl-init" disabled="">Cancel</button>
+                <button type="button" class="ccm--save-settings ccm--button-primary ccm--ctrl-init" disabled="">Save
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="ccm-settings-summoner" role="complementary" data-nosnippet="">
+        <a href="javascript:" class="ccm-settings-summoner--link ccm--ctrl-init" tabindex="0" role="button"
+           aria-label="Change consent" title="Change consent" aria-haspopup="dialog">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                 data-ccm-lazy-src="https://cloud.ccm19.de/settings-icon?user=61eb2491679c7c14b7316600&amp;domain=61eb24c0993e1e4a412354c0&amp;theme=61ec41ff74fc01526421ef13&amp;v=1642889428"
+                 alt="Change consent" class="ccm-settings-summoner--icon" role="presentation"
+                 style="display:none!important">
+        </a>
+    </div>
+</div>
+<div id="batBeacon515158596229" style="width: 0px; height: 0px; display: none; visibility: hidden;"><img
+        id="batBeacon279813708287" width="0" height="0" alt=""
+        src="assets/0"
+        style="width: 0px; height: 0px; display: none; visibility: hidden;"></div>
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true">
+    <template shadowrootmode="open">
+        <style>
+            div.grammarly-desktop-integration {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            div.grammarly-desktop-integration:before {
+                content: attr(data-content);
+            }
+        </style>
+        <div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration"
+             data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div>
+    </template>
+</grammarly-desktop-integration>
+</html>
