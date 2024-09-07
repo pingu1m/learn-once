@@ -5,18 +5,29 @@ CREATE TABLE IF NOT EXISTS note (
     text TEXT NOT NULL,
     date TEXT NOT NULL,
     favorite BOOLEAN NOT NULL DEFAULT FALSE,
-    labels TEXT,
+    labels TEXT DEFAULT '',
     language TEXT NOT NULL,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Mock data insertion
-INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at) VALUES
-('Meeting Tomorrow', 'Testing testing testing', '2023-10-22T09:00:00', 1, 'meeting,work,important', 'plaintext', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at) VALUES ('TODO', '# TODO \\n Remember to buy milk', '2023-10-20T15:00:00', 1, '', 'markdown', '2024-08-29 13:51:26', '2024-08-29 13:51:26');
+INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at) VALUES ('New Note @ Aug 29, 2024, 10:51:40 AM', '#Sample Markdown Note with Cards
 
-INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at) VALUES
-('Lunch Reminder', 'Note here testing testing 123.', '2023-10-21T12:00:00', 0, 'reminder,social', 'plaintext', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+Card definition below
 
-INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at) VALUES
-('Code Review', 'Note here testing testing 123', '2023-10-20T15:00:00', 1, 'code,work,urgent', 'plaintext', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+```toml
+[[card]]
+title = "What is Rust?"
+hint = "Programming Language"
+description = "A systems programming language focused on safety, speed, and concurrency."
+example = "Rust is often used for performance-critical services."
+[[card]]
+title = "What is ownership in Rust?"
+hint = "Memory Management"
+description = "A set of rules that governs how a Rust program manages memory."
+example = "Ownership ensures memory safety without a garbage collector."
+```
+
+You can declare more card blocks
+', '2024-08-29T13:51:40.931Z', 0, '', 'markdown', '2024-08-29T13:51:40.931Z', '2024-08-29T13:51:40.931Z');
