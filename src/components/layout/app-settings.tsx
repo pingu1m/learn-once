@@ -56,7 +56,7 @@ export const AppSettings = () => {
                             <Label htmlFor="width">Font</Label>
                             <div className="col-span-2">
                                 <Select
-                                    className="col-span-2"
+                                    // className="col-span-2"
                                     // defaultValue={editorFont}
                                     // onValueChange={(v) => setEditorFont(v)}
                                 >
