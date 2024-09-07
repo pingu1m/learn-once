@@ -25,8 +25,16 @@
   <a href="https://github.com/pingu1m/learn-once/actions/workflows/tauri-build-release.yml"><img src="https://github.com/pingu1m/learn-once/actions/workflows/tauri-build-release.yml/badge.svg?branch=release" alt="CI"></a>
 </p>
 
-# Learn more at
-### <strong><a href="https://learn-once.com">https://learn-once.com</a></strong>
+
+## Motivation
+
+In today's fast-paced world, we are constantly bombarded with technical information. From developers needing to track complex frameworks and languages, to students and professionals trying to retain large amounts of data, managing this information efficiently is crucial for success.
+
+**LearnOnce** was built with a simple yet powerful vision: to provide a streamlined tool that helps users efficiently capture, organize, and internalize knowledge. By combining a note-taking interface with spaced repetition learning techniques, LearnOnce helps users not only store information but also retain and recall it over time. The motivation behind LearnOnce stems from the need for an intuitive and effective way to manage long-term learning, making it especially valuable for technical learners who need to process large volumes of knowledge in a minimalistic, distraction-free environment.
+
+We believe that the best learning tools are those that work with the brain’s natural processes, helping users reinforce what they’ve learned in a way that sticks. LearnOnce empowers users by merging note-taking with flashcard learning in a seamless workflow that’s backed by cognitive science.
+
+Learn more at:  <strong><a href="https://learn-once.com">https://learn-once.com</a></strong>
 
 ## Why LearnOnce?
 
@@ -85,6 +93,16 @@ You can download the latest version of LearnOnce for the following platforms:
 | Linux    | x86_64 (RPM)  | [learn-once-latest-1.x86_64.rpm](https://learn-once.com/download/learn-once-latest-1.x86_64.rpm) |
 | Linux    | AppImage      | [learn-once_latest_amd64.AppImage](https://learn-once.com/download/learn-once_latest_amd64.AppImage) |
 | Windows  | x64           | [learn-once_latest_x64-setup.exe](https://learn-once.com/download/learn-once_latest_x64-setup.exe) |
+
+## Project Acknowledgment
+
+This project was developed as part of the final project for the **University of London Bachelor of Computer Science** degree program.
+
+LearnOnce is the culmination of rigorous academic training, practical implementation, and the desire to create a solution that benefits technical learners. The project has helped bridge theoretical concepts and real-world application, leading to the development of this innovative learning tool.
+
+### Special Thanks
+
+I would like to extend a heartfelt **thank you** to all the professors, instructors, and support staff at the University of London and Goldsmiths. Your guidance and dedication made this project possible. The knowledge and skills imparted during the course have been instrumental in shaping this application.
 
 ## Contributing
 
