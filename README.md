@@ -134,7 +134,7 @@ This project wouldn't be possible without the amazing work of the maintainers an
 
 LearnOnce is a free and open-source project. If you find it valuable, please consider supporting its development through a donation.
 
-<a href="https://www.buymeacoffee.com/pingu1m">
+<a href="buymeacoffee.com/fgunixb">
 <img style="width: 192px" src="https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg" />
 </a>
 
