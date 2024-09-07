@@ -23,8 +23,8 @@ sqlx = { version = "0.8.0", features = ["runtime-tokio-native-tls", "sqlite"] }
 #bonsaidb = { version = "*", features = ["local-full"] }
 # deps
 #ts-rs = "6"
-#strum = "0.26"
-#strum_macros = "0.26"
+strum = "0.26"
+strum_macros = "0.26"
 uuid = {version = "1", features = ["v4", "fast-rng"] }
 #surrealdb = {version ="1.0.0-beta.9", features = ["kv-rocksdb"] }
 tokio = { version = "1", features = ["full"] }
