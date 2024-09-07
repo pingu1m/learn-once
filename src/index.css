@@ -125,4 +125,37 @@
     }
   }
 
+.card {
+  perspective: 1000px;
+}
+.card .card-content {
+  transition: 1s;
+  transform-style: preserve-3d;
+}
+.card .card-content.flipped {
+  transform: rotateY(180deg);
+}
+.card-content .front {
+  backface-visibility: hidden;
+}
+.card-content .back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+.card-content.not-flipped .back {
+  display: none;
+}
+.card-content.flipped .front {
+  display: none;
+}
 
+#gfg {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 15px;
+}
+
+pre {
+  overflow-x: auto;
+}
