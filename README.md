@@ -36,15 +36,13 @@
 
 > Master technical knowledge with a powerful combination of note-taking and flashcard-based learning.
 
+
+
 - :bookmark_tabs: Create and manage notes with ease.
 - :flashlight: Automatically convert notes into flashcards for review.
 - :alarm_clock: Use spaced repetition for long-term knowledge retention.
 - 🌑 Dark and light modes available for a comfortable learning experience.
 - :computer: Available on Linux, macOS, and Windows.
-- **Efficient Note Management:** Create, organize, and manage your notes with ease. Syntax highlighting and markdown support enhance your note-taking experience.
-- **Spaced Repetition Learning:**  Transform your notes into flashcards and leverage spaced repetition algorithms for optimized learning and long-term retention.
-- **Intuitive User Dashboard:**  A centralized hub to track your study progress, upcoming card reviews, and overall learning journey.
-- **Secure and User-Friendly:** Enjoy a safe and intuitive environment designed to support your learning goals.
 
 ## Download & Installation
 
