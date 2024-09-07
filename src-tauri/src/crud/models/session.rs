@@ -1,17 +1,16 @@
 use std::collections::HashMap;
 use sqlx::{FromRow, Executor, Row};
-use chrono::{DateTime, Utc};
+use chrono::{Utc};
 use serde::{Deserialize, Serialize};
 use serde_json;
 
 use pulldown_cmark::{Parser, Options, Event, Tag, TagEnd};
 use pulldown_cmark::CodeBlockKind::Fenced;
-use regex::Regex;
+use strum_macros::{Display, EnumString};
 use crate::crud::models::note::Note;
-// use crate::crud::models::card::Card;
 use crate::state::AppState;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, EnumString, Display)]
 enum LearnStatus {
     NotStarted,
     LowConfidence,
@@ -20,7 +19,7 @@ enum LearnStatus {
     Learned,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 struct Card {
     id: Option<i32>,
     session_id: Option<i32>,
@@ -28,7 +27,7 @@ struct Card {
     hint: String,
     description: String,
     example: String,
-    learn_status: LearnStatus,
+    learn_status: String,
     session_count: i32,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,134 +39,183 @@ struct RawCard {
 }
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
-struct StudySession {
-    id: Option<i32>,
-    title: String,
-    session_count: i32,
-    bag_size: i32,
-    created_at: String,
-    latest_run: Option<String>,
+pub struct StudySession {
+    pub id: Option<i32>,
+    pub title: String,
+    pub session_count: i32,
+    pub bag_size: i32,
+    pub created_at: String,
+    pub latest_run: Option<String>,
     #[sqlx(skip)]
-    cards: Vec<Card>,
+    pub cards: Vec<Card>,
     #[sqlx(skip)]
-    cards_bag: Vec<Card>,
+    pub cards_bag: Vec<Card>,
 }
 
 #[tauri::command]
-pub async fn session_delete(state: tauri::State<'_, AppState>, id: i64) -> Result<i64, String> {
-    let db = &state.db;
-
-    let query_result = sqlx::query("DELETE FROM session WHERE id=?")
+pub async fn session_delete(state: tauri::State<'_, AppState>, id: i64) -> Result<u64, String> {
+    let query_result = sqlx::query("DELETE FROM study_sessions WHERE id=?")
         .bind(id)
-        .execute(db)
-        .await;
+        .execute(&state.db)
+        .await
+        .map_err(|e| format!("Failed to delete sessions: {}", e))?;
 
-    if query_result.is_err() {
-        db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    db.close().await;
-    Ok(id)
+    Ok(query_result.rows_affected())
 }
 
 #[tauri::command]
 pub async fn session_select(state: tauri::State<'_, AppState>) -> Result<String, String> {
     let db = &state.db;
 
-    let query_result = sqlx::query_as::<_, StudySession>("SELECT * FROM study_sessions ORDER BY id DESC")
+    let results: Vec<StudySession> = sqlx::query_as("SELECT * FROM study_sessions ORDER BY id DESC")
         .fetch_all(db)
-        .await;
+        .await
+        .map_err(|e| format!("Failed to fetch sessions: {}", e))?;
 
-    if query_result.is_err() {
-        db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    let results = query_result.unwrap();
     let encoded_message = serde_json::to_string(&results).unwrap();
-    db.close().await;
     Ok(encoded_message)
 }
 
 #[tauri::command]
-pub async fn fetch_sessions_by_card(state: tauri::State<'_, AppState>, card_id: i64) -> Result<String, String> {
+pub async fn start_study_session(state: tauri::State<'_, AppState>, id: i32) -> Result<StudySession, String> {
     let db = &state.db;
-
-    let query_result: Result<Vec<StudySession>, _> = sqlx::query_as(
-        "SELECT s.* FROM session s
-         JOIN session_cards sc ON s.id = sc.session_id
-         WHERE sc.card_id = ?"
+    let mut session: StudySession = sqlx::query_as(
+        "SELECT * FROM study_sessions WHERE id = ?",
     )
-        .bind(card_id)
-        .fetch_all(db)
-        .await;
+        .bind(id)
+        .fetch_one(db)
+        .await
+        .map_err(|e| format!("Failed to fetch note: {}", e))?;
 
-    if query_result.is_err() {
-        db.close().await;
-        return Err(format!("{:?}", query_result.err()));
+    session.session_count += 1;
+
+    let mut cards: Vec<Card> = sqlx::query_as(
+        "SELECT * FROM cards WHERE session_id = ?",
+    )
+        .bind(id)
+        .fetch_all(db)
+        .await
+        .map_err(|e| format!("Failed to fetch cards: {}", e))?;
+
+    let mut new_bag = Vec::new();
+
+    for card in &mut cards {
+        let trigger_session = card.session_count + card_confidence_value(card.learn_status.clone());
+        if trigger_session == session.session_count {
+            if new_bag.len() < session.bag_size as usize {
+                new_bag.push(card.clone());
+            } else {
+                // Card did not fit the bag_size incrementing it for the next run
+                card.session_count += 1;
+            }
+        }
+    }
+    for card in &mut cards {
+        let learn_status = card.learn_status.parse().unwrap();
+        match learn_status {
+            LearnStatus::NotStarted => {
+                if new_bag.len() < session.bag_size as usize {
+                    new_bag.push(card.clone());
+                }
+            }
+            _ => {}
+        }
     }
 
-    let results = query_result.unwrap();
-    let encoded_message = serde_json::to_string(&results).unwrap();
-    db.close().await;
-    Ok(encoded_message)
+    if new_bag.is_empty() {
+        new_bag = cards.clone()
+    }
+
+    session.cards_bag = new_bag;
+    session.cards = cards;
+    session.latest_run = Some(Utc::now().format("%Y-%m-%d %H:%M:%S").to_string());
+
+    Ok(session)
 }
 
-// #[tauri::command]
-// pub async fn start_study_session(state: tauri::State<'_, AppState>, session: StudySession) -> Result<StudySession, String> {
-//     let db = &state.db;
-//     let mut session = session;
-//     session.session_count += 1;
-//
-//     let mut new_bag = Vec::new();
-//
-//     // for card in &mut session.cards {
-//     //     if card.session_count == card.session_count {
-//     //         let trigger_session = card_session_count + card_confidence_value(&card.learn_status);
-//     //         if trigger_session == session.session_count && new_bag.len() < session.bag_size as usize {
-//     //             new_bag.push(card.clone());
-//     //             card.session_count = session.session_count + 1;
-//     //         }
-//     //     } else {
-//     //         // First time seeing this card
-//     //         card.session_count = session.session_count;
-//     //         if new_bag.len() < session.bag_size as usize {
-//     //             new_bag.push(card.clone());
-//     //         }
-//     //     }
-//     // }
-//
-//     session.cards_bag = new_bag;
-//     session.latest_run = Some(Utc::now());
-//
-//     // Save updated session if necessary
-//
-//
-//     // let query_result = sqlx::query(
-//     //     "INSERT INTO card (title, front, back, extra)
-//     //      VALUES (?, ?, ?, ?)"
-//     // )
-//     //     .bind(&card.title)
-//     //     .bind(&card.front)
-//     //     .bind(&card.back)
-//     //     .bind(&card.extra)
-//     //     .execute(db)
-//     //     .await;
-//     //
-//     // if query_result.is_err() {
-//     //     db.close().await;
-//     //     return Err(format!("{:?}", query_result.err()));
-//     // }
-//     //
-//     // let id = query_result.unwrap().last_insert_rowid();
-//     // db.close().await;
-//     // Ok(id)
-//
-//     Ok(session)
-// }
+#[tauri::command]
+pub async fn finish_study_session(state: tauri::State<'_, AppState>, session: StudySession) -> Result<(), String> {
+    let db = &state.db;
 
-fn card_confidence_value(status: &LearnStatus) -> usize {
+    let study_session = sqlx::query("UPDATE study_sessions set latest_run = ?, session_count = ? WHERE id = ?")
+        .bind(&session.latest_run)
+        .bind(&session.session_count)
+        .bind(&session.id)
+        .execute(&state.db)
+        .await
+        .map_err(|e| format!("Failed to update study session: {}", e))?;
+
+    dbg!(&session);
+    dbg!(study_session.rows_affected());
+
+    for card in &session.cards_bag {
+        let update_card = sqlx::query("UPDATE cards set session_count = ?, learn_status = ? WHERE id = ?")
+            .bind(card.session_count)
+            .bind(card.learn_status.to_string())
+            .bind(card.id)
+            .execute(db)
+            .await
+            .map_err(|e| format!("Failed to save card: {}", e))?;
+        dbg!(&card);
+        dbg!(update_card.rows_affected());
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn create_study_session(
+    state: tauri::State<'_, AppState>,
+    id: i32,
+) -> Result<bool, String> {
+    // Fetch the note from the database
+    let db = &state.db;
+    let note: Note = sqlx::query_as(
+        "SELECT * FROM note WHERE id = ?",
+    )
+        .bind(id)
+        .fetch_one(db)
+        .await
+        .map_err(|e| format!("Failed to fetch note: {}", e))?;
+
+    let cards = parse_cards_from_markdown(&note.text)?;
+    if !cards.is_empty() {
+        let now = Utc::now(); // Assuming you're using the `chrono` crate for datetime handling
+        let study_session_title = format!("{} - {}", note.title, now.format("%Y-%m-%d %H:%M:%S"));
+        let study_session = sqlx::query("INSERT INTO study_sessions (title) VALUES (?) RETURNING *")
+            .bind(study_session_title)
+            // .fetch_one(db)
+            .execute(&state.db)
+            .await
+            .map_err(|e| format!("Failed to create study session: {}", e))?;
+
+        // let session_id = study_session.get::<i32, _>(0);
+        let session_id = study_session.last_insert_rowid();
+        for card in cards {
+            sqlx::query(
+                "INSERT INTO cards (session_id, title, hint, description, example, learn_status)
+             VALUES (?, ?, ?, ?, ?, ?)",
+            )
+                .bind(session_id)
+                .bind(card.title)
+                .bind(card.hint)
+                .bind(card.description)
+                .bind(card.example)
+                .bind("NotStarted".to_string())
+                .execute(db)
+                .await
+                .map_err(|e| format!("Failed to save card: {}", e))?;
+        }
+
+        Ok(true)
+    } else {
+        println!("No cards found. Session not created.");
+        Ok(false)
+    }
+}
+
+fn card_confidence_value(status: String) -> i32 {
+    let status = status.parse().unwrap();
     match status {
         LearnStatus::LowConfidence => 1,
         LearnStatus::MediumConfidence => 2,
@@ -175,51 +223,6 @@ fn card_confidence_value(status: &LearnStatus) -> usize {
         LearnStatus::Learned => 4,
         LearnStatus::NotStarted => 0,
     }
-}
-
-#[tauri::command]
-pub async fn create_study_session(
-    state: tauri::State<'_, AppState>,
-    note_id: String,
-) -> Result<bool, String> {
-    // Fetch the note from the database
-    let db = &state.db;
-    let note: Note = sqlx::query_as(
-        "SELECT id, title, text, updated_at FROM note WHERE id = ?",
-    )
-        .bind(note_id)
-        .fetch_one(db)
-        .await
-        .map_err(|e| format!("Failed to fetch note: {}", e))?;
-
-    let now = Utc::now(); // Assuming you're using the `chrono` crate for datetime handling
-    let study_session_title = format!("{} - {}", now, note.title);
-    let study_session = sqlx::query("INSERT INTO study_sessions (title) VALUES (?) RETURNING *")
-        .bind(study_session_title)
-        .fetch_one(db)
-        // .execute(&state.db)
-        .await
-        .map_err(|e| format!("Failed to create study session: {}", e))?;
-
-    let session_id = study_session.get::<i32, _>(0);
-    let cards = parse_cards_from_markdown(&note.text)?;
-    for card in cards {
-        sqlx::query(
-            "INSERT INTO cards (session_id, title, hint, description, example, learn_status)
-             VALUES (?, ?, ?, ?, ?, ?, 0)",
-        )
-            .bind(session_id)
-            .bind(card.title)
-            .bind(card.hint)
-            .bind(card.description)
-            .bind(card.example)
-            .bind("NotStarted".to_string())
-            .execute(db)
-            .await
-            .map_err(|e| format!("Failed to save card: {}", e))?;
-    }
-
-    Ok(true)
 }
 
 fn parse_cards_from_markdown(markdown: &str) -> Result<Vec<RawCard>, String> {
@@ -274,7 +277,6 @@ fn parse_cards_from_markdown(markdown: &str) -> Result<Vec<RawCard>, String> {
 
     Ok(cards)
 }
-
 
 #[cfg(test)]
 mod tests {

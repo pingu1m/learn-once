@@ -4,10 +4,8 @@ use crate::state::AppState;
 
 #[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Note {
-    pub id: String,  // UUID as a String
+    pub id: i32,  // UUID as a String
     pub title: String,
-    pub email: String,
-    pub subject: String,
     pub text: String,
     pub date: String,  // ISO 8601 format string
     pub favorite: bool,
@@ -25,13 +23,10 @@ pub async fn note_insert(state: tauri::State<'_, AppState>, note: Note) -> Resul
     dbg!(&note);
 
     let query_result = sqlx::query(
-        "INSERT INTO note (id, title, email, subject, text, date, favorite, labels, language, updated_at, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO note (title, text, date, favorite, labels, language, updated_at, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     )
-        .bind(&note.id)
         .bind(&note.title)
-        .bind(&note.email)
-        .bind(&note.subject)
         .bind(&note.text)
         .bind(&note.date)
         .bind(note.favorite)
@@ -40,15 +35,12 @@ pub async fn note_insert(state: tauri::State<'_, AppState>, note: Note) -> Resul
         .bind(&note.updated_at)
         .bind(&note.created_at)
         .execute(db)
-        .await;
+        .await
+        .map_err(|e| format!("Failed to save note: {}", e))?;
 
-    if query_result.is_err() {
-        // db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    // db.close().await;
-    Ok(note.id)
+    let note_id = query_result.last_insert_rowid();
+    dbg!(&note_id);
+    Ok(note_id.to_string())
 }
 
 
@@ -59,12 +51,10 @@ pub async fn note_update(state: tauri::State<'_, AppState>, note: Note) -> Resul
 
     let query_result = sqlx::query(
         "UPDATE note
-         SET title = ?, email = ?, subject = ?, text = ?, date = ?, favorite = ?, labels = ?, language = ?, updated_at = ?
+         SET title = ?, text = ?, date = ?, favorite = ?, labels = ?, language = ?, updated_at = ?
          WHERE id = ?"
     )
         .bind(&note.title)
-        .bind(&note.email)
-        .bind(&note.subject)
         .bind(&note.text)
         .bind(&note.date)
         .bind(note.favorite)
@@ -73,34 +63,24 @@ pub async fn note_update(state: tauri::State<'_, AppState>, note: Note) -> Resul
         .bind(&note.updated_at)
         .bind(&note.id)
         .execute(db)
-        .await;
+        .await
+        .map_err(|e| format!("Failed to save note: {}", e))?;
 
-    if query_result.is_err() {
-        // db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    // db.close().await;
-    Ok(note.id)
+    Ok(note.id.to_string())
 }
 
 #[tauri::command]
-pub async fn note_delete(state: tauri::State<'_, AppState>, id: String) -> Result<String, String> {
+pub async fn note_delete(state: tauri::State<'_, AppState>, id: i32) -> Result<u64, String> {
     let db = &state.db;
     dbg!(&id);
 
     let query_result = sqlx::query("DELETE FROM note WHERE id=?")
         .bind(id.clone())
         .execute(db)
-        .await;
+        .await
+        .map_err(|e| format!("Failed to delete note: {}", e))?;
 
-    if query_result.is_err() {
-        // db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    // db.close().await;
-    Ok(id)
+    Ok(query_result.rows_affected())
 }
 
 #[tauri::command]
@@ -108,17 +88,11 @@ pub async fn note_select(state: tauri::State<'_, AppState>) -> Result<String, St
     let db = &state.db;
     dbg!("Note select rs.");
 
-    let query_result: Result<Vec<Note>, _> = sqlx::query_as("SELECT * FROM note ORDER BY id DESC")
+    let results: Vec<Note> = sqlx::query_as("SELECT * FROM note ORDER BY id DESC")
         .fetch_all(db)
-        .await;
+        .await
+        .map_err(|e| format!("Failed to select note: {}", e))?;
 
-    if query_result.is_err() {
-        // db.close().await;
-        return Err(format!("{:?}", query_result.err()));
-    }
-
-    let results = query_result.unwrap();
     let encoded_message = serde_json::to_string(&results).unwrap();
-    // db.close().await;
     Ok(encoded_message)
 }
