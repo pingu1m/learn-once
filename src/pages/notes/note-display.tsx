@@ -1,6 +1,6 @@
 // @ts-nocheck
 import format from "date-fns/format"
-import {Heart} from "lucide-react"
+import {Heart, Trash} from "lucide-react"
 import {Note} from "@/data.tsx";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -9,6 +9,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.t
 import monacoThemes from 'monaco-themes/themes/themelist';
 import {Label} from "@/components/ui/label.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
+import {invoke} from "@tauri-apps/api/core";
 // import useNoteStore from "@/store/useNoteStore.ts";
 import React, {useEffect, useRef, useState} from "react";
 import Editor, {useMonaco} from "@monaco-editor/react";
@@ -18,7 +19,8 @@ import {initVimMode} from 'monaco-vim';
 import {HeartFilledIcon, MixerHorizontalIcon} from "@radix-ui/react-icons";
 import {supportedLanguages} from "@/pages/notes/utils.ts";
 import {InputTags} from "@/components/ui/input-tags.tsx";
-import {useUpdateNote} from "@/components/notes/noteApi.ts";
+import {useDeleteNote, useUpdateNote} from "@/components/notes/noteApi.ts";
+import useAppStore from "@/store/useAppStore.ts";
 
 interface NoteDisplayProps {
     editingNote: Note | null
@@ -39,8 +41,15 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
     const [editorTheme, setEditorTheme] = useState("monokai");
     const [editorVimMode, setEditorVimMode] = useState(false);
     const [labels, setLabels] = useState([]);
-    const { mutate: updateNote } = useUpdateNote();
+    const {mutate: updateNote} = useUpdateNote();
+    const {mutate: deleteNote} = useDeleteNote();
+    const setEditingNote = useAppStore(state => state.setEditingNote);
 
+    const createStudySession = async (note) => {
+        const response = await invoke<string>('create_study_session', {id: note.id});
+        let res = JSON.parse(response);
+        console.log("Created study session res:", res)
+    }
 
     // React Query mutation for updating the note
     // const updateNoteMutation = useMutation(
@@ -167,13 +176,17 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
             handleNoteChange('text', text);
         }
     };
+    const handleDeleteNote = (id: number) => {
+        deleteNote(id);
+        setEditingNote(null)
+    }
 
     return (
         <div className="flex h-full flex-col">
             {note ? (
                 <div className="flex flex-1 flex-col">
-                    <div className="grid gap-4 grid-cols-12 text-sm p-4">
-                        <div className="grid col-span-5 gap-1">
+                    <div className="grid gap-4 grid-cols-12 text-sm p-2">
+                        <div className="grid col-span-9 gap-1">
                             <Input
                                 type="text"
                                 value={note.title}
@@ -196,13 +209,16 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="">
+                    </div>
+                    <Separator/>
+                    <div className="grid gap-4 grid-cols-12 text-sm p-2">
+                        <div className="col-span-8">
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button variant="ghost" size="icon" disabled={!note}
                                             onClick={() => handleNoteChange("favorite", !note?.favorite)}
                                     >
-                                        {!note.favorite ?
+                                        {note.favorite ?
                                             <HeartFilledIcon className="mr-2 h-4 w-4 text-red-600"/> :
                                             <Heart className="mr-2 h-4 w-4"/>}
                                         <span className="sr-only">Forward</span>
@@ -210,13 +226,31 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                                 </TooltipTrigger>
                                 <TooltipContent>Favorite</TooltipContent>
                             </Tooltip>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button variant="ghost" size="icon" disabled={!note}
+                                            onClick={() => handleDeleteNote(note?.id)}
+                                    >
+                                        <Trash className="mr-2 h-4 w-4 text-red-600"/>
+                                        <span className="sr-only">Delete Note</span>
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Delete Note</TooltipContent>
+                            </Tooltip>
                         </div>
                         {note.date && (
-                            <div className="col-span-2 text-xs text-muted-foreground flex justify-end items-center">
-                                {format(new Date(note.date), "PPpp")}
+                            <div className="col-span-3 text-xs text-muted-foreground flex justify-start items-center">
+                                <div className="hidden xl:flex">
+                                    {format(new Date(note.date), "PPpp")}
+                                </div>
                             </div>
                         )}
                         <div className="flex justify-end">
+                            <Button className="mr-2" variant="outline" size="sm" disabled={!note}
+                                    onClick={() => createStudySession(note)}
+                            >
+                                Study this note.
+                            </Button>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
@@ -300,7 +334,7 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                         </div>
                     </div>
                     <Separator/>
-                    <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
+                    <div className="flex-1 whitespace-pre-wrap p-2 text-sm">
                         <Editor
                             height="97%"
                             language={note.language}
@@ -322,12 +356,12 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                         />
                         <code className="status-node"></code>
                     </div>
-                    <Separator className="mt-auto"/>
-                    <div className="p-4">
-                        <InputTags value={labels} onChange={(v) => {
-                            // setLabels(v)
-                        }}/>
-                    </div>
+                    {/*<Separator className="mt-auto"/>*/}
+                    {/*<div className="p-4">*/}
+                    {/*    <InputTags value={labels} onChange={(v) => {*/}
+                    {/*        // setLabels(v)*/}
+                    {/*    }}/>*/}
+                    {/*</div>*/}
                 </div>
             ) : (
                 <div className="p-8 text-center text-muted-foreground">

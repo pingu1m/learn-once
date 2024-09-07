@@ -1,23 +1,21 @@
-import React, {ComponentProps} from "react"
+// @ts-nocheck
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-
 import {cn} from "@/lib/utils"
-import {Note} from "@/data.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area.tsx";
-import {Badge} from "@/components/ui/badge.tsx";
-import useNoteStore from "@/store/useNoteStore.ts";
+import useAppStore from "@/store/useAppStore.ts";
 import {HeartFilledIcon} from "@radix-ui/react-icons";
 import {Heart} from "lucide-react";
+import {Note} from "@/types/Note.ts";
 
-interface MailListProps {
+interface Props {
     items: Note[]
 }
 
-export function NoteList({items}: MailListProps) {
-    const [editingNote, setEditingNote] = useNoteStore(state => [state.editingNote, state.setEditingNote]);
+export function NoteList({items}: Props) {
+    const [editingNote, setEditingNote] = useAppStore(state => [state.editingNote, state.setEditingNote]);
 
     return (
-        <ScrollArea className="h-screen">
+        <ScrollArea className="">
             <div className="flex flex-col gap-2 p-4 pt-0">
                 {items && items.map((item) => (
                     <button
@@ -32,8 +30,8 @@ export function NoteList({items}: MailListProps) {
                             <div className="flex items-center">
                                 <div className="flex items-center gap-2">
                                     <div className="font-semibold">{item.title}</div>
-                                    {!item.favorite ?
-                                        <HeartFilledIcon className="mr-2 h-4 w-4 text-red-600" /> :
+                                    {item.favorite ?
+                                        <HeartFilledIcon className="mr-2 h-4 w-4 text-red-600"/> :
                                         <Heart className="mr-2 h-4 w-4"/>}
                                 </div>
                                 <div
@@ -49,37 +47,13 @@ export function NoteList({items}: MailListProps) {
                                     })}
                                 </div>
                             </div>
-                            {/*<div className="text-xs font-medium">{item.subject}</div>*/}
                         </div>
                         <div className="line-clamp-2 text-xs text-muted-foreground">
                             {item.text.substring(0, 300)}
                         </div>
-                        {/*{item.labels.length ? (*/}
-                        {/*    <div className="flex items-center gap-2">*/}
-                        {/*        {item.labels.map((label) => (*/}
-                        {/*            <Badge key={label} variant="outline">*/}
-                        {/*                {label}*/}
-                        {/*            </Badge>*/}
-                        {/*        ))}*/}
-                        {/*    </div>*/}
-                        {/*) : null}*/}
                     </button>
                 ))}
             </div>
         </ScrollArea>
     )
-}
-
-function getBadgeVariantFromLabel(
-    label: string
-): ComponentProps<typeof Badge>["variant"] {
-    if (["work"].includes(label.toLowerCase())) {
-        return "default"
-    }
-
-    if (["personal"].includes(label.toLowerCase())) {
-        return "outline"
-    }
-
-    return "secondary"
 }
