@@ -1737,7 +1737,7 @@ dependencies = [
 
 [[package]]
 name = "learn-once"
-version = "0.0.2"
+version = "0.0.1"
 dependencies = [
  "chrono",
  "pulldown-cmark",
