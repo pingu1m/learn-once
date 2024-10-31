@@ -1,11 +1,10 @@
 // @ts-nocheck
 import format from "date-fns/format"
-import {Heart, Trash} from "lucide-react"
+import {Heart, Save, Trash} from "lucide-react"
 import {Note} from "@/data.tsx";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import monacoThemes from 'monaco-themes/themes/themelist';
 import {Label} from "@/components/ui/label.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
@@ -31,6 +30,8 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
     //     updateNote: state.updateNote,
     // }));
     const [note, setNote] = useState<Note | null>(editingNote);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [isAutoSaveEnabled, setIsAutoSaveEnabled] = useState(false);
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const monaco = useMonaco();
     const [vimMode, setVimMode] = useState(null);
@@ -50,19 +51,6 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         let res = JSON.parse(response);
         console.log("Created study session res:", res)
     }
-
-    // React Query mutation for updating the note
-    // const updateNoteMutation = useMutation(
-    //     (updatedNote) => invoke('note_update', { note: updatedNote }),
-    //     {
-    //         onSuccess: () => {
-    //             console.log('Note updated successfully');
-    //         },
-    //         onError: (error) => {
-    //             console.error('Error updating note:', error);
-    //         },
-    //     }
-    // );
 
     useEffect(() => {
         setTheme();
@@ -87,35 +75,24 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         if (editingNote) {
             setLabels(editingNote.labels.split(','));
             setNote(editingNote);
+            setHasUnsavedChanges(false);
         }
     }, [editingNote]);
-
-    // useEffect(() => {
-    //     return () => {
-    //         if (saveTimeoutRef.current) {
-    //             clearTimeout(saveTimeoutRef.current);
-    //             if (note) {
-    //                 // updateNoteMutation.mutate({ ...note, updated_at: new Date().toISOString() });
-    //                 updateNote({...note, updated_at: new Date().toISOString()});
-    //             }
-    //             // @ts-ignore
-    //         }
-    //     };
-    // }, [note]);
 
     const handleEditorDidMount = (editor, monaco) => {
         // setup key bindings
         editor.addAction({
-            id: "some-unique-id",
-            label: "Some label!",
+            id: "save-note",
+            label: "Save Note",
             keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
             run: function (editor) {
                 alert("we wanna save something => " + editor.getValue());
+                handleSaveNote();
                 return null;
             }
         });
 
-        editorRef.current = editor; // Store a reference to the editor instance
+        editorRef.current = editor;
     };
 
     const toggleVimMode = () => {
@@ -123,7 +100,6 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         if (editorVimMode) {
             const statusNode = document.querySelector(".status-node");
             const vimMode = initVimMode(editorRef.current, statusNode);
-            console.log("res", vimMode)
             setVimMode(vimMode);
         } else {
             if (vimMode) {
@@ -138,19 +114,23 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         toggleVimMode();
     }, [editorVimMode]);
 
-    // useEffect(() => {
-    //     handleNoteChange('labels', labels)
-    // }, [labels])
+    const handleSaveNote = () => {
+        if (note && hasUnsavedChanges) {
+            updateNote(note);
+            setHasUnsavedChanges(false);
+        }
+    };
 
     const debounceUpdateNote = (updatedNote: Note) => {
-        updateNote(updatedNote);
-        // if (saveTimeoutRef.current) {
-        //     clearTimeout(saveTimeoutRef.current);
-        // }
-        // saveTimeoutRef.current = setTimeout(() => {
-        //     updateNote(updatedNote);
-        //     // updateNoteMutation.mutate(updatedNote);
-        // }, 5000);
+        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+        setHasUnsavedChanges(true);
+
+        if (isAutoSaveEnabled) {
+            saveTimeoutRef.current = setTimeout(() => {
+                updateNote(updatedNote);
+                setHasUnsavedChanges(false);
+            }, 5000);
+        }
     };
 
     const handleNoteChange = (key: string, value: string | string[] | boolean) => {
@@ -158,16 +138,16 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         const updatedNote = {
             ...note,
             date: new Date().toISOString(),
-            [key]: value
+            [key]: value,
         } as Note;
         debounceUpdateNote(updatedNote);
-        setNote(updatedNote)
+        setNote(updatedNote);
     };
 
     const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleNoteChange('title', event.target.value);
     };
-    //
+
     const handleLanguageChange = (newLanguage: string) => {
         handleNoteChange('language', newLanguage);
     };
@@ -212,7 +192,7 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                     </div>
                     <Separator/>
                     <div className="grid gap-4 grid-cols-12 text-sm p-2">
-                        <div className="col-span-8">
+                        <div className="col-span-1">
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button variant="ghost" size="icon" disabled={!note}
@@ -221,7 +201,7 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                                         {note.favorite ?
                                             <HeartFilledIcon className="mr-2 h-4 w-4 text-red-600"/> :
                                             <Heart className="mr-2 h-4 w-4"/>}
-                                        <span className="sr-only">Forward</span>
+                                        <span className="sr-only">Favorite</span>
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>Favorite</TooltipContent>
@@ -238,100 +218,57 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                                 <TooltipContent>Delete Note</TooltipContent>
                             </Tooltip>
                         </div>
+                        <div className="col-span-8 flex items-center text-left space-x-4">
+                            <div className="flex items-center space-x-2">
+                                <Label htmlFor="gistSync">Gist Sync</Label>
+                            <Switch
+                                id="gistSync"
+                                checked={note?.gist_sync ?? false}
+                                onCheckedChange={(value) => handleNoteChange("gist_sync", value)}
+                            />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Label htmlFor="autoSave">Auto Save</Label>
+                                <Switch
+                                    id="autoSave"
+                                    checked={isAutoSaveEnabled}
+                                    onCheckedChange={setIsAutoSaveEnabled}
+                                />
+                            </div>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={handleSaveNote}
+                                        disabled={!hasUnsavedChanges}
+                                    >
+                                        <Save className="h-4 w-4 mr-1" />
+                                        Save
+                                        {hasUnsavedChanges && <span className="ml-1 text-yellow-500">*</span>}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {hasUnsavedChanges ? "Save changes" : "No unsaved changes"}
+                                </TooltipContent>
+                            </Tooltip>
+                            <Button
+                                className="ml-2"
+                                variant="outline"
+                                size="sm"
+                                disabled={!note}
+                                        onClick={() => createStudySession(note)}
+                                >
+                                Study this note
+                                </Button>
+                            </div>
                         {note.date && (
-                            <div className="col-span-3 text-xs text-muted-foreground flex justify-start items-center">
+                            <div className="col-span-3 text-xs text-muted-foreground flex justify-end items-center">
                                 <div className="hidden xl:flex">
                                     {format(new Date(note.date), "PPpp")}
                                 </div>
                             </div>
                         )}
-                        <div className="flex justify-end">
-                            <Button className="mr-2" variant="outline" size="sm" disabled={!note}
-                                    onClick={() => createStudySession(note)}
-                            >
-                                Study this note.
-                            </Button>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
-                                        <MixerHorizontalIcon className="mr-2 h-4 w-4"/>
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-80">
-                                    <div className="grid gap-4">
-                                        <div className="space-y-2">
-                                            <h4 className="font-medium leading-none">Editor settings</h4>
-                                            <p className="text-sm text-muted-foreground">
-                                                Change editor settings below.
-                                            </p>
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="width">Font</Label>
-                                                <div className="col-span-2">
-                                                    <Select
-                                                        className="col-span-2"
-                                                        defaultValue={editorFont}
-                                                        onValueChange={(v) => setEditorFont(v)}
-                                                    >
-                                                        <SelectTrigger id="area">
-                                                            <SelectValue placeholder="Select"/>
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="Fira Code">Fira Code</SelectItem>
-                                                            <SelectItem value="Roboto Mono">Roboto Mono</SelectItem>
-                                                            <SelectItem value="Source Code Pro">Source Code
-                                                                Pro</SelectItem>
-                                                            <SelectItem value="Space Mono">Space Mono</SelectItem>
-                                                            <SelectItem value="JetBrains Mono">JetBrains
-                                                                Mono</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="maxWidth">Size</Label>
-                                                <Input
-                                                    id="maxWidth"
-                                                    type="number"
-                                                    value={editorFontSize}
-                                                    onChange={(e) => setEditorFontSize(e.target.value)}
-                                                    className="col-span-2 h-8"
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="height">Theme</Label>
-                                                <div className="col-span-2">
-                                                    <Select
-                                                        defaultValue="monokai"
-                                                        onValueChange={(value) => setEditorTheme(value)}>
-                                                        <SelectTrigger id="area">
-                                                            <SelectValue placeholder="Select"/>
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {Object.entries(monacoThemes).map(([themeId, themeName]) => (
-                                                                <SelectItem key={themeId} value={themeId}>
-                                                                    {themeName}
-                                                                </SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="vimMode">Vim mode</Label>
-                                                <Switch
-                                                    checked={editorVimMode}
-                                                    onCheckedChange={() => setEditorVimMode(!editorVimMode)}
-                                                    id="vimMode"
-                                                    aria-label="Toggle Vim mode"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
                     </div>
                     <Separator/>
                     <div className="flex-1 whitespace-pre-wrap p-2 text-sm">

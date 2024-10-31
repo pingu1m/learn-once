@@ -53,7 +53,12 @@ pub async fn setup_db(app: &App) -> Db {
 
     dbg!(path.to_str().unwrap());
 
-    sqlx::migrate!("./migrations").run(&db).await.unwrap();
+    let migrated = sqlx::migrate!("./migrations").run(&db).await;
+
+    match migrated {
+        Ok(_) => println!("database migrated."),
+        Err(err) => panic!("error creating databse file {}", err),
+    };
 
     db
 }

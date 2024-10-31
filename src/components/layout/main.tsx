@@ -3,7 +3,7 @@ import {TooltipProvider} from "@/components/ui/tooltip.tsx";
 import * as React from "react";
 import {Notes} from "@/pages/notes/notes.tsx";
 import {Sessions} from "@/pages/sessions/sessions.tsx";
-import {Top} from "@/components/layout/top.tsx";
+import {ToastContainer} from "react-toastify";
 
 const NoMatch = () => {
     return (<p>There's nothing here: 404!</p>);
@@ -18,6 +18,17 @@ function Main() {
                 <Route path="sessions" element={<Sessions/>}/>
                 <Route path="*" element={<NoMatch/>}/>
             </Routes>
+            <ToastContainer />
+            {/*<ToastContainer*/}
+            {/*    position="bottom-right"*/}
+            {/*    autoClose={5000}*/}
+            {/*    hideProgressBar={false}*/}
+            {/*    newestOnTop*/}
+            {/*    closeOnClick*/}
+            {/*    pauseOnFocusLoss={false}*/}
+            {/*    draggable*/}
+            {/*    pauseOnHover*/}
+            {/*/>*/}
         </TooltipProvider>
     )
 }

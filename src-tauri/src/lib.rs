@@ -10,6 +10,7 @@ use crud::models::{note::*, session::*};
 use tauri::{AppHandle, Manager, State};
 use tokio::time::sleep;
 use database::setup_db;
+use crate::crud::models::settings::{get_settings, save_settings};
 use crate::state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -53,6 +54,10 @@ pub async fn run() {
                 create_study_session,
                 start_study_session,
                 finish_study_session,
+
+                get_settings,
+                save_settings,
+                test_gist_token,
             ]
         )
         .build(tauri::generate_context!())

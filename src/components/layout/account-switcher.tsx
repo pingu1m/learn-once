@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {BookOpenText, Files} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import {Card, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {SettingsDrawer} from "@/components/layout/app-settings.tsx";
 // import {
 //     Select,
 //     SelectContent,
@@ -50,7 +51,8 @@ export function AccountSwitcher({isCollapsed}: AccountSwitcherProps) {
 
 
     return (
-        <>
+        <div className="flex " >
+            <SettingsDrawer />
             <Tabs  defaultValue="notes" className="w-full"
                    onValueChange={handleValueChange}
                    value={selectedAccount}
@@ -88,6 +90,6 @@ export function AccountSwitcher({isCollapsed}: AccountSwitcherProps) {
             {/*        ))}*/}
             {/*    </SelectContent>*/}
             {/*</Select>*/}
-        </>
+        </div>
     )
 }

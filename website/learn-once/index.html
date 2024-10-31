@@ -10,21 +10,25 @@
         html, body {
             scroll-behavior: smooth;
         }
+
         /* Make sure all slides take up the same space */
         .slideshow img {
             width: 100%;
             height: 400px;
             object-fit: cover;
         }
+
         .aspect-w-16 {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
         }
+
         .aspect-h-9 {
             height: 0;
             overflow: hidden;
         }
+
         .aspect-w-16 iframe {
             position: absolute;
             top: 0;
@@ -35,16 +39,17 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
-<!-- Alpine.js Slideshow Script -->
 <script>
+    let imgs = [
+        {image: 'assets/images/bg1.png', text: 'Slide 1'},
+        {image: 'assets/images/bg2.png', text: 'Slide 2'},
+        {image: 'assets/images/bg3.png', text: 'Slide 3'}
+    ]
+
     function slideshow() {
         return {
             currentIndex: 0,
-            slides: [
-                { image: 'assets/images/bg1.png', text: 'Slide 1' },
-                { image: 'assets/images/bg2.png', text: 'Slide 2' },
-                { image: 'assets/images/bg3.png', text: 'Slide 3' }
-            ],
+            slides: imgs,
             next() {
                 console.log("ne")
                 this.currentIndex = (this.currentIndex + 1) % this.slides.length;
@@ -55,23 +60,6 @@
             }
         };
     }
-    // function slideshow() {
-    //     return {
-    //         currentIndex: 0,
-    //         slides: [
-    //             { image: 'assets/images/bg1.png?text=Slide+0', text: 'Slide 0' },
-    //             { image: 'https://via.placeholder.com/800x400.png?text=Slide+1', text: 'Slide 1' },
-    //             { image: 'https://via.placeholder.com/800x400.png?text=Slide+2', text: 'Slide 2' },
-    //             { image: 'https://via.placeholder.com/800x400.png?text=Slide+3', text: 'Slide 3' }
-    //         ],
-    //         next() {
-    //             this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-    //         },
-    //         prev() {
-    //             this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-    //         }
-    //     };
-    // }
 </script>
 
 <!-- Navigation -->
@@ -88,73 +76,49 @@
     </div>
 </nav>
 
-<!-- Intro Section -->
-<!--<section id="intro" class="h-screen bg-blue-500 flex items-center justify-center">-->
-<!--    <h1 class="text-white text-5xl font-bold">Welcome to LearnOnce</h1>-->
-<!--</section>-->
-
 <section id="intro" class="flex flex-col md:flex-row items-center justify-center bg-yellow-400 h-screen p-8">
     <!-- Left Text Section -->
-    <div class="w-full md:w-1/2 text-center md:text-left p-6">
-        <!-- App Phrase -->
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Create fancy UML class diagrams.
-        </h1>
+    <div class="flex flex-row w-2/4">
+        <div class="w-1/3"></div>
+        <div class="w-1/3 flex flex-col items-end justify-between">
+            <!-- App Phrase -->
+            <h1 class="font-bold text-gray-900 mb-4 text-right mt-6">
+                <div class="text-4xl">Learn smarter with</div>
+                <br>
+                <span class="text-8xl bg-white mt-3">LearnOnce</span>
+            </h1>
 
-        <!-- App Description -->
-        <p class="text-lg text-gray-700 mb-6">
-            A lightweight UML class designer with a clear design and easy to use.
-            Just focus on your ideas and start drawing right away.
-        </p>
+            <!-- App Description -->
+            <p class="text-2xl text-gray-800 text-justify mb-6">
 
-        <!-- Download Links -->
-        <div class="flex justify-center md:justify-start space-x-4 mt-8">
-            <a href="#" class="inline-block">
-                <img src="assets/img/logos/App_Store.webp" alt="Download for Mac" class="w-32">
-            </a>
-            <a href="#" class="inline-block">
-                <img src="assets/img/logos/Windows_Store.webp" alt="Download for Windows" class="w-32">
-            </a>
-            <a href="#" class="inline-block">
-                <img src="assets/img/logos/Linux_Store.webp" alt="Download for Linux" class="w-32">
-            </a>
+                LearnOnce was built with a simple yet powerful vision: to provide a
+                streamlined tool that helps users efficiently capture, organize, and
+                internalize knowledge. By combining a note-taking interface with spaced
+                repetition learning techniques, LearnOnce helps users not only store
+                information but also retain and recall it over time. The motivation behind
+                LearnOnce stems from the need for an intuitive and effective way to manage
+                long-term learning, making it especially valuable for technical learners who
+                need to process large volumes of knowledge in a minimalistic, distraction-free environment.
+            </p>
+
         </div>
-    </div>
 
-    <!-- Right Slideshow Section -->
-    <div class="w-full md:w-1/2 text-center p-6">
-        <div class="bg-white shadow-lg rounded-lg p-4">
-            <div class="relative">
-                <!-- Placeholder for the slideshow of screenshots -->
-                <div class="w-full h-64 bg-gray-200 animate-pulse flex items-center justify-center text-gray-500">
-                    Slideshow Placeholder
-                </div>
-
-                <!-- Pagination dots for slideshow -->
-                <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex space-x-2 mt-2">
-                    <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
-                    <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
-                    <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
-                </div>
-            </div>
+        <!-- Logo Section -->
+        <div class="w-full md:w-1/2 text-center p-6">
+            <img class="rounded-2xl shadow-lg p-4 bg-white w-full"
+                 src="assets/images/logo3.webp" alt="learn-once-logo">
         </div>
     </div>
 </section>
 
 
 <!-- Features Section -->
-<!--<section id="features" class="h-screen bg-green-500 flex items-center justify-center">-->
-<!--    <div class="text-white text-center">-->
-<!--        <h2 class="text-4xl font-bold mb-4">Features</h2>-->
-<!--        <p class="text-xl">Capture notes, create flashcards, and study smarter!</p>-->
-<!--    </div>-->
-<!--</section>-->
 <section id="features" class="h-screen bg-gray-100 py-16 flex items-center justify-center">
     <div class="container mx-auto px-4">
-        <div class="grid grid-cols-2 gap-6 bg-white shadow-lg p-8 rounded-md">
+        <div class="grid grid-cols-2 gap-6 bg-white shadow-lg p-8 rounded-md h-3/4">
             <!-- Top Left: Feature Title -->
             <div class="col-span-2 text-center">
-                <h2 class="text-4xl font-bold text-gray-900 mb-8">Focus on Ideas, Not Details</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-8">Focus on Learning, Not Setup</h2>
             </div>
 
             <!-- Bottom Left: Feature 01 -->
@@ -162,7 +126,7 @@
                 <div class="text-gray-200 text-6xl font-bold opacity-25">01</div>
                 <div>
                     <h3 class="text-yellow-500 font-bold text-xl">SAVE TIME</h3>
-                    <p class="text-gray-600 mt-2">Documenting code is important but maintaining diagrams can be time-consuming. With LearnOnce, you can create, update, and maintain notes and flashcards with ease and without setup.</p>
+                    <p class="text-gray-600 mt-2">Easily create and maintain notes and flashcards, without distractions, so you can focus on learning.</p>
                 </div>
             </div>
 
@@ -170,8 +134,8 @@
             <div class="flex flex-col justify-between">
                 <div class="text-gray-200 text-6xl font-bold opacity-25">02</div>
                 <div>
-                    <h3 class="text-yellow-500 font-bold text-xl">COMMUNICATE IDEAS</h3>
-                    <p class="text-gray-600 mt-2">With LearnOnce, you can easily share key concepts and ideas by converting notes into flashcards, making communication straightforward and productive.</p>
+                    <h3 class="text-yellow-500 font-bold text-xl">STAY ORGANIZED</h3>
+                    <p class="text-gray-600 mt-2">Convert your notes into flashcards and organize study sessions for effective review and recall.</p>
                 </div>
             </div>
 
@@ -179,48 +143,32 @@
             <div class="flex flex-col justify-between">
                 <div class="text-gray-200 text-6xl font-bold opacity-25">03</div>
                 <div>
-                    <h3 class="text-yellow-500 font-bold text-xl">CATCH ATTENTION</h3>
-                    <p class="text-gray-600 mt-2">Create flashcards that stand out and effectively illustrate your ideas with a clean design that’s as engaging as it is functional.</p>
+                    <h3 class="text-yellow-500 font-bold text-xl">BOOST LEARNING</h3>
+                    <p class="text-gray-600 mt-2">Use scientifically proven methods like spaced repetition and active recall to retain knowledge longer.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
 <!-- Screenshots Section -->
-<!--<section id="screenshots" class="h-screen bg-yellow-500 flex items-center justify-center">-->
-<!--    <div class="text-gray-900 text-center">-->
-<!--        <h2 class="text-4xl font-bold mb-4">Screenshots</h2>-->
-<!--        <p>Preview the interface of LearnOnce</p>-->
-<!--    </div>-->
-<!--</section>-->
 <section id="screenshots" class="h-screen flex items-center justify-center bg-blue-500">
-    <div x-data="slideshow()" class="relative w-4/5 lg:w-3/5 xl:w-2/5">
-        <div class="relative overflow-hidden">
+    <div x-data="slideshow()" class="relative w-4/5 lg:w-3/5 xl:w-2/5 rounded-xl shadow-xl overflow-hidden">
+        <div style="max-height: 42rem;" class="relative overflow-hidden bg-amber-200">
             <!-- Slides -->
             <template x-for="(slide, index) in slides" :key="index">
-                <div class="" x-show="currentIndex === index"
+                <div x-show="currentIndex === index"
+                     class="w-full h-full "
                      x-transition:enter="transition duration-500 ease-in-out"
                      x-transition:enter-start="translate-x-full opacity-0"
                      x-transition:enter-end="translate-x-0 opacity-100"
                      x-transition:leave="transition duration-500 ease-in-out"
                      x-transition:leave-start="translate-x-0 opacity-100"
                      x-transition:leave-end="translate-x-full opacity-0"
-                     style="display: none;">
-
-<!--                     class="absolute inset-0 transition-opacity duration-1000"-->
-<!--                     class="absolute inset-0 w-full h-full transition-all duration-500 ease-in-out transform"-->
-<!--                     x-transition:enter="transition ease-in-out duration-500"-->
-<!--                     x-transition:enter-start="opacity-0"-->
-<!--                     x-transition:enter-end="opacity-100"-->
-<!--                     x-transition:leave="transition ease-in-out duration-500"-->
-<!--                     x-transition:leave-start="opacity-100"-->
-<!--                     x-transition:leave-end="opacity-0">-->
-                    <img :src="slide.image" alt="Slide Image" class="w-full h-96 object-cover rounded-lg">
-                    <div class="absolute bottom-4 left-4 text-white">
+                     style="display: none;height: 42rem;">
+                    <img :src="slide.image" alt="Slide Image" style="height: 38rem;" class="w-full object-cover rounded-lg">
+                    <div class="relative bottom-4 left-4">
                         <h2 class="text-2xl font-bold" x-text="slide.text"></h2>
-                        <p class="text-lg mt-2">This is a placeholder for the text content for the slide.</p>
                     </div>
                 </div>
             </template>
@@ -241,14 +189,16 @@
 
 <!-- Video Section -->
 <section id="video" class="h-screen bg-purple-500 flex items-center justify-center">
-<!--    <div class="text-white text-center">-->
-<!--        <h2 class="text-4xl font-bold mb-4">Demo Video</h2>-->
-<!--        <p>Watch how LearnOnce helps you master new knowledge.</p>-->
-<!--    </div>-->
+    <!--    <div class="text-white text-center">-->
+    <!--        <h2 class="text-4xl font-bold mb-4">Demo Video</h2>-->
+    <!--        <p>Watch how LearnOnce helps you master new knowledge.</p>-->
+    <!--    </div>-->
     <div class="container mx-auto text-center">
         <h2 class="text-4xl text-white font-bold mb-8">Watch How LearnOnce Works</h2>
         <div class="relative w-full lg:w-3/4 mx-auto aspect-w-16 aspect-h-9">
-            <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/LMzoZ3IIRCs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/LMzoZ3IIRCs" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
         </div>
     </div>
 </section>
@@ -276,51 +226,65 @@
                 <tbody class="bg-white divide-y divide-gray-100">
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/redhat-icon.svg" alt="Linux" class="w-8 h-8 mr-2"> Linux (x86_64)
+                        <img src="https://api.iconify.design/logos/redhat-icon.svg" alt="Linux" class="w-8 h-8 mr-2">
+                        Linux (x86_64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once-latest-1.x86_64.rpm" class="text-blue-600 hover:underline">Download RPM</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once-latest-1.x86_64.rpm"
+                                             class="text-blue-600 hover:underline">Download RPM</a></td>
                     <td class="px-4 py-4">8.35 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/apple.svg" alt="Apple" class="w-8 h-8 mr-2"> macOS (aarch64)
+                        <img src="https://api.iconify.design/logos/apple.svg" alt="Apple" class="w-8 h-8 mr-2"> macOS
+                        (aarch64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_aarch64.dmg" class="text-blue-600 hover:underline">Download DMG</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_aarch64.dmg"
+                                             class="text-blue-600 hover:underline">Download DMG</a></td>
                     <td class="px-4 py-4">7.92 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/apple.svg" alt="Apple" class="w-8 h-8 mr-2"> macOS (x64)
+                        <img src="https://api.iconify.design/logos/apple.svg" alt="Apple" class="w-8 h-8 mr-2"> macOS
+                        (x64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64.dmg" class="text-blue-600 hover:underline">Download DMG</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64.dmg"
+                                             class="text-blue-600 hover:underline">Download DMG</a></td>
                     <td class="px-4 py-4">8.13 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/linux-tux.svg" alt="Linux" class="w-8 h-8 mr-2"> Linux (amd64)
+                        <img src="https://api.iconify.design/logos/linux-tux.svg" alt="Linux" class="w-8 h-8 mr-2">
+                        Linux (amd64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_amd64.AppImage" class="text-blue-600 hover:underline">Download AppImage</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_amd64.AppImage"
+                                             class="text-blue-600 hover:underline">Download AppImage</a></td>
                     <td class="px-4 py-4">128.29 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/ubuntu.svg" alt="Ubuntu" class="w-8 h-8 mr-2"> Linux (amd64)
+                        <img src="https://api.iconify.design/logos/ubuntu.svg" alt="Ubuntu" class="w-8 h-8 mr-2"> Linux
+                        (amd64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_amd64.deb" class="text-blue-600 hover:underline">Download DEB</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_amd64.deb"
+                                             class="text-blue-600 hover:underline">Download DEB</a></td>
                     <td class="px-4 py-4">8.35 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/microsoft-icon.svg" alt="Windows" class="w-8 h-8 mr-2"> Windows (x64)
+                        <img src="https://api.iconify.design/logos/microsoft-icon.svg" alt="Windows"
+                             class="w-8 h-8 mr-2"> Windows (x64)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64-setup.exe" class="text-blue-600 hover:underline">Download EXE</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64-setup.exe"
+                                             class="text-blue-600 hover:underline">Download EXE</a></td>
                     <td class="px-4 py-4">4.55 MB</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-4 text-gray-700 flex items-center justify-center">
-                        <img src="https://api.iconify.design/logos/microsoft-icon.svg" alt="Windows" class="w-8 h-8 mr-2"> Windows (x64, en-US)
+                        <img src="https://api.iconify.design/logos/microsoft-icon.svg" alt="Windows"
+                             class="w-8 h-8 mr-2"> Windows (x64, en-US)
                     </td>
-                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64_en-US.msi" class="text-blue-600 hover:underline">Download MSI</a></td>
+                    <td class="px-4 py-4"><a href="download/learn-once_latest_x64_en-US.msi"
+                                             class="text-blue-600 hover:underline">Download MSI</a></td>
                     <td class="px-4 py-4">8.09 MB</td>
                 </tr>
                 </tbody>

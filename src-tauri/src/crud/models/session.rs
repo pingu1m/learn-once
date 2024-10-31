@@ -54,6 +54,12 @@ pub struct StudySession {
 
 #[tauri::command]
 pub async fn session_delete(state: tauri::State<'_, AppState>, id: i64) -> Result<u64, String> {
+    let query_result = sqlx::query("DELETE FROM cards WHERE session_id=?")
+        .bind(id)
+        .execute(&state.db)
+        .await
+        .map_err(|e| format!("Failed to delete sessions: {}", e))?;
+
     let query_result = sqlx::query("DELETE FROM study_sessions WHERE id=?")
         .bind(id)
         .execute(&state.db)

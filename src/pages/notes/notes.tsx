@@ -11,8 +11,8 @@ import * as React from "react";
 import {Button} from "@/components/ui/button.tsx";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import format from "date-fns/format"
-import {Top} from "@/components/layout/top.tsx";
 import {Bottom} from "@/components/layout/bottom.tsx";
+import {toast} from "react-toastify";
 
 export function Notes() {
     const defaultLayout = [265, 40, 60]
@@ -21,10 +21,11 @@ export function Notes() {
     const {data: createdNote, mutate: createNote} = useCreateNote()
 
     const handleCreateNote = () => {
+        let date_sync = format(new Date(), "PPpp")
         let note = {
             id: 0,
             // @ts-ignore
-            title: "New Note @ " + format(new Date(), "PPpp"),
+            title: "New Note @ " + date_sync,
             text: `
 #Sample Markdown Note with Cards
 
@@ -51,6 +52,8 @@ You can declare more card blocks
             language: "markdown",
             updated_at: new Date().toISOString(),
             created_at: new Date().toISOString(),
+            gist_key: "lo",
+            gist_sync: false,
         }
         // @ts-ignore
         let new_note = createNote(note)
@@ -81,6 +84,7 @@ You can declare more card blocks
     //     // });
     //     // setSearchData(finalResult);
     // };
+    const notify = () => {toast.success('Notification that overrides the position setting!');};
 
     return (
         <>
@@ -101,7 +105,6 @@ You can declare more card blocks
                         <div>Error loading note.</div> // You can replace this with an error component
                     ) : (
                         <div className="h-screen flex flex-col items-stretch justify-between">
-                            <Top/>
                             <Tabs defaultValue="all" className="flex-grow">
                                 <div
                                     className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex">
@@ -145,6 +148,7 @@ You can declare more card blocks
                                 ) : (
                                     <>
                                         <TabsContent value="all" className="m-0 h-[40%] overflow-hidden">
+                                            <Button onClick={() => notify()} > Notify </Button>
                                             {notes && <NoteList items={notes}/>}
                                         </TabsContent>
                                         <TabsContent value="unread" className="m-0">
