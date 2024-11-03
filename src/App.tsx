@@ -1,4 +1,5 @@
 import * as React from "react";
+import '@mdxeditor/editor/style.css'
 import "./index.css"
 import Main from "@/components/layout/main.tsx";
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,9 +24,6 @@ import {useEffect, useState} from "react";
 import {Badge} from "@/components/ui/badge.tsx";
 import useSettingsStore from "@/store/useSettingsStore.ts";
 import Page01 from "@/app/dashboard/page01.tsx";
-import Page11 from "@/components/sidebar-11.tsx";
-import Page111 from "@/components/sidebar-111.tsx";
-import Page13 from "@/components/sidebar-13.tsx";
 
 
 function App() {
@@ -101,9 +99,8 @@ function App() {
 
     return (
         <>
-            {/*<Main/>*/}
-            {/*<Page13 />*/}
-            <Page01 />
+            <Main/>
+            {/*<Page01 />*/}
             <CommandDialog className={bounceClass} open={open} onOpenChange={setOpen} onKeyDown={onKeyDown}>
                 <div className="m-2">
                     {pages.map((p) => (

@@ -62,28 +62,6 @@ You can declare more card blocks
         setEditingNote(createdNote)
     }
 
-    // useEffect(() => {
-    //     setSearchData(notes)
-    // }, [notes]);
-    //
-    // const searchItem = (query) => {
-    //     if (!query) {
-    //         // setSearchData(notes);
-    //         return;
-    //     }
-    //     query = query.toLowerCase();
-    //
-    //     const finalResult = [];
-    //     // notes.forEach((item) => {
-    //     //     if (
-    //     //         item.title.toLowerCase().indexOf(query) !== -1 ||
-    //     //         item.labels.includes(query)
-    //     //     ) {
-    //     //         finalResult.push(item);
-    //     //     }
-    //     // });
-    //     // setSearchData(finalResult);
-    // };
     const notify = () => {toast.success('Notification that overrides the position setting!');};
 
     return (

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronDown, Plus } from "lucide-react"
+import {ChevronDown, ChevronsUpDown, Plus} from "lucide-react"
 
 import {
   DropdownMenu,
@@ -32,12 +32,14 @@ export function TeamSwitcher({
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton className="w-fit px-1.5">
-              <div className="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+            <SidebarMenuButton
+                size="default"
+                className="px-1.5 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+              <div className="flex aspect-square size-5 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <activeTeam.logo className="size-3" />
               </div>
               <span className="truncate font-semibold">{activeTeam.name}</span>
-              <ChevronDown className="opacity-50" />
+              <ChevronsUpDown className="opacity-50 ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent

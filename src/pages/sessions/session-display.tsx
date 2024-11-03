@@ -16,6 +16,34 @@ import {
 } from "@/components/ui/dialog.tsx";
 import {invoke} from "@tauri-apps/api/core";
 import useAppStore from "@/store/useAppStore.ts";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+    SidebarTrigger
+} from "@/components/ui/sidebar.tsx";
+import {Input} from "@/components/ui/input.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
+import {NavActions} from "@/components/nav-actions.tsx";
+import {Textarea} from "@/components/ui/textarea.tsx";
+import * as React from "react";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
+import {
+    ArrowDown,
+    ArrowUp,
+    Bell,
+    Copy,
+    CornerUpLeft,
+    CornerUpRight,
+    FileText, GalleryVerticalEnd,
+    LineChart,
+    Link,
+    MoreHorizontal,
+    Settings2, Trash,
+    Trash2
+} from "lucide-react";
 
 async function endStudySession(session: Session) {
     try {
@@ -262,6 +290,69 @@ interface Props {
     editingSession: Session | null
 }
 
+const data = [
+    [
+        {
+            label: "Customize Page",
+            icon: Settings2,
+        },
+        {
+            label: "Turn into wiki",
+            icon: FileText,
+        },
+    ],
+    [
+        {
+            label: "Copy Link",
+            icon: Link,
+        },
+        {
+            label: "Duplicate",
+            icon: Copy,
+        },
+        {
+            label: "Move to",
+            icon: CornerUpRight,
+        },
+        {
+            label: "Move to Trash",
+            icon: Trash2,
+        },
+    ],
+    [
+        {
+            label: "Undo",
+            icon: CornerUpLeft,
+        },
+        {
+            label: "View analytics",
+            icon: LineChart,
+        },
+        {
+            label: "Version History",
+            icon: GalleryVerticalEnd,
+        },
+        {
+            label: "Show delete pages",
+            icon: Trash,
+        },
+        {
+            label: "Notifications",
+            icon: Bell,
+        },
+    ],
+    [
+        {
+            label: "Import",
+            icon: ArrowUp,
+        },
+        {
+            label: "Export",
+            icon: ArrowDown,
+        },
+    ],
+]
+
 export function SessionDisplay({editingSession}: Props) {
     const [start, setStart] = useState<boolean>(false)
     const {mutate: deleteSession} = useDeleteSession()
@@ -277,23 +368,78 @@ export function SessionDisplay({editingSession}: Props) {
     }, [editingSession]);
 
     let start_els = (
-        <div className="flex h-full flex-row justify-center items-center">
-            <div className="w-[550px] text-center">
-                {editingSession ?
-                    <>
-                        <Button className="mr-2" variant="default" size="lg" onClick={() => setStart(true)}>
-                            Start Session - {editingSession?.id}
-                        </Button>
-                        <Button className="mr-2" variant="default" size="lg"
-                                onClick={() => handleDeleteNote(editingSession?.id)}>
-                            Delete Study Session
-                        </Button>
-                    </>
-                    :
-                    <span className="text-2xl">No session selected</span>
-                }
+        <SidebarInset>
+            <header className="flex h-14 shrink-0 items-center gap-2 border-b">
+                <div className="flex flex-1 items-center gap-2 px-3">
+                    <SidebarTrigger/>
+                    <Separator orientation="vertical" className="mr-2 h-4"/>
+                    {editingSession?.title}
+                </div>
+                <div className="ml-auto px-3">
+                    Run: {editingSession?.session_count}
+                    <div className="hidden font-medium text-muted-foreground md:inline-block">
+                        Edit Oct 08
+                    </div>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 data-[state=open]:bg-accent"
+                            >
+                                <MoreHorizontal/>
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-56 overflow-hidden rounded-lg p-0"
+                            align="end"
+                        >
+                            <Sidebar collapsible="none" className="bg-transparent">
+                                <SidebarContent>
+                                    {data.map((group, index) => (
+                                        <SidebarGroup key={index} className="border-b last:border-none">
+                                            <SidebarGroupContent className="gap-0">
+                                                <SidebarMenu>
+                                                    {group.map((item, index) => (
+                                                        <SidebarMenuItem key={index}>
+                                                            <SidebarMenuButton>
+                                                                <item.icon/>
+                                                                <span>{item.label}</span>
+                                                            </SidebarMenuButton>
+                                                        </SidebarMenuItem>
+                                                    ))}
+                                                </SidebarMenu>
+                                            </SidebarGroupContent>
+                                        </SidebarGroup>
+                                    ))}
+                                </SidebarContent>
+                            </Sidebar>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            </header>
+            <div className="flex flex-1 flex-col p-4">
+                <div className="flex flex-col h-full">
+                    <div className="flex h-full flex-row justify-center items-center">
+                        <div className="w-[550px] text-center">
+                            {editingSession ?
+                                <>
+                                    <Button className="mr-2" variant="default" size="lg" onClick={() => setStart(true)}>
+                                        Start Session - {editingSession?.id}
+                                    </Button>
+                                    <Button className="mr-2" variant="default" size="lg"
+                                            onClick={() => handleDeleteNote(editingSession?.id)}>
+                                        Delete Study Session
+                                    </Button>
+                                </>
+                                :
+                                <span className="text-2xl">No session selected</span>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </SidebarInset>
     )
 
     let main_els = (
