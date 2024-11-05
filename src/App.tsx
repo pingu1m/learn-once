@@ -23,7 +23,6 @@ import {
 import {useEffect, useState} from "react";
 import {Badge} from "@/components/ui/badge.tsx";
 import useSettingsStore from "@/store/useSettingsStore.ts";
-import Page01 from "@/app/dashboard/page01.tsx";
 
 
 function App() {

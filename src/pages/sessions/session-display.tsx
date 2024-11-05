@@ -418,7 +418,7 @@ export function SessionDisplay({editingSession}: Props) {
                     </Popover>
                 </div>
             </header>
-            <div className="flex flex-1 flex-col p-4">
+            <div className="flex flex-1 flex-col p-4 items-center justify-center">
                 <div className="flex flex-col h-full">
                     <div className="flex h-full flex-row justify-center items-center">
                         <div className="w-[550px] text-center">
@@ -443,13 +443,64 @@ export function SessionDisplay({editingSession}: Props) {
     )
 
     let main_els = (
-        <div className="flex h-full flex-col">
-            {editingSession ? (
-                <div className="flex flex-1 flex-col">
-                    {editingSession && <SessionRun setStart={setStart} sessionId={editingSession.id}/>}
+        <SidebarInset>
+            <header className="flex h-14 shrink-0 items-center gap-2 border-b">
+                <div className="flex flex-1 items-center gap-2 px-3">
+                    <SidebarTrigger/>
+                    <Separator orientation="vertical" className="mr-2 h-4"/>
+                    {editingSession?.title}
                 </div>
-            ) : (<span>t</span>)}
-        </div>
+                <div className="ml-auto px-3">
+                    Run: {editingSession?.session_count}
+                    <div className="hidden font-medium text-muted-foreground md:inline-block">
+                        Edit Oct 08
+                    </div>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7 data-[state=open]:bg-accent"
+                            >
+                                <MoreHorizontal/>
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                            className="w-56 overflow-hidden rounded-lg p-0"
+                            align="end"
+                        >
+                            <Sidebar collapsible="none" className="bg-transparent">
+                                <SidebarContent>
+                                    {data.map((group, index) => (
+                                        <SidebarGroup key={index} className="border-b last:border-none">
+                                            <SidebarGroupContent className="gap-0">
+                                                <SidebarMenu>
+                                                    {group.map((item, index) => (
+                                                        <SidebarMenuItem key={index}>
+                                                            <SidebarMenuButton>
+                                                                <item.icon/>
+                                                                <span>{item.label}</span>
+                                                            </SidebarMenuButton>
+                                                        </SidebarMenuItem>
+                                                    ))}
+                                                </SidebarMenu>
+                                            </SidebarGroupContent>
+                                        </SidebarGroup>
+                                    ))}
+                                </SidebarContent>
+                            </Sidebar>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            </header>
+            <div className="flex flex-1 flex-col">
+                {editingSession ? (
+                    <div className="flex flex-1 flex-col">
+                        {editingSession && <SessionRun setStart={setStart} sessionId={editingSession.id}/>}
+                    </div>
+                ) : (<span>t</span>)}
+            </div>
+        </SidebarInset>
     )
 
     return start ? main_els : start_els;

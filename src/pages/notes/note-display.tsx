@@ -10,7 +10,7 @@ import {
     Heart, LineChart, Link,
     MoreHorizontal,
     Save,
-    Settings2,
+    Settings2, SlidersHorizontal,
     Star,
     Trash,
     Trash2
@@ -45,6 +45,7 @@ import {
 import {NavActions} from "@/components/nav-actions.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
+import {cn} from "@/lib/utils.ts";
 
 interface NoteDisplayProps {
     editingNote: Note | null
@@ -256,66 +257,41 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
 
     let topNavActions = note ? (
         <div className="flex items-center gap-2 text-sm">
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant={note.favorite ? "default" : "outline"}
-                            size="icon"
-                            disabled={!note}
-                            onClick={() => handleNoteChange("favorite", !note?.favorite)}
-                        >
-                            {/*<HeartFilledIcon className="h-4 w-4 text-red-600"/>*/}
-                            <Heart className="h-4 w-4"/>
-                            <span className="sr-only">Favorite</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Favorite</TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-                {/*<div className="flex items-center space-x-2">*/}
-                {/*    <Label htmlFor="gistSync">Gist Sync</Label>*/}
-                {/*    <Switch*/}
-                {/*        id="gistSync"*/}
-                {/*        checked={note?.gist_sync ?? false}*/}
-                {/*        onCheckedChange={(value) => handleNoteChange("gist_sync", value)}*/}
-                {/*    />*/}
-                {/*</div>*/}
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant={note?.gist_sync ? "default" : "outline"}
-                            // onClick={() => setIsGistSync(!isGistSync)}
-                            onClick={() => handleNoteChange("gist_sync", !note?.gist_sync)}
-                            size="icon"
-                        >
-                            <GitBranch className="h-4 w-4"/>
-                            <span className="sr-only">Toggle Gist Sync</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Gist Sync</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant={isAutoSaveEnabled ? "default" : "outline"}
-                            onClick={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
-                            size="icon"
-                        >
-                            <Save className="h-4 w-4"/>
-                            <span className="sr-only">Toggle Auto Save</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Auto Save</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+            {/*<TooltipProvider>*/}
+            {/*    <Tooltip>*/}
+            {/*        <TooltipTrigger asChild>*/}
+            {/*            <Button*/}
+            {/*                variant={note.favorite ? "default" : "outline"}*/}
+            {/*                size="icon"*/}
+            {/*                disabled={!note}*/}
+            {/*                onClick={() => handleNoteChange("favorite", !note?.favorite)}*/}
+            {/*            >*/}
+            {/*                /!*<HeartFilledIcon className="h-4 w-4 text-red-600"/>*!/*/}
+            {/*                <Heart className="h-4 w-4"/>*/}
+            {/*                <span className="sr-only">Favorite</span>*/}
+            {/*            </Button>*/}
+            {/*        </TooltipTrigger>*/}
+            {/*        <TooltipContent>Favorite</TooltipContent>*/}
+            {/*    </Tooltip>*/}
+            {/*</TooltipProvider>*/}
+            {/*<TooltipProvider>*/}
+            {/*    <Tooltip>*/}
+            {/*        <TooltipTrigger asChild>*/}
+            {/*            <Button*/}
+            {/*                variant={note?.gist_sync ? "default" : "outline"}*/}
+            {/*                // onClick={() => setIsGistSync(!isGistSync)}*/}
+            {/*                onClick={() => handleNoteChange("gist_sync", !note?.gist_sync)}*/}
+            {/*                size="icon"*/}
+            {/*            >*/}
+            {/*                <GitBranch className="h-4 w-4"/>*/}
+            {/*                <span className="sr-only">Toggle Gist Sync</span>*/}
+            {/*            </Button>*/}
+            {/*        </TooltipTrigger>*/}
+            {/*        <TooltipContent>*/}
+            {/*            <p>Gist Sync</p>*/}
+            {/*        </TooltipContent>*/}
+            {/*    </Tooltip>*/}
+            {/*</TooltipProvider>*/}
             <TooltipProvider>
                 {/*<Button*/}
                 {/*    className="ml-2"*/}
@@ -326,31 +302,35 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                 {/*</Button>*/}
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant="outline" size="icon"
+                        <Button variant="outline" size="outline"
                                 disabled={!note}
                                 onClick={() => createStudySession(note)}
                         >
                             <BookOpenCheck className="h-4 w-4"/>
+                            Study
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>Study thid Note</p>
+                        <p>Study this Note</p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleSaveNote}
-                            disabled={!hasUnsavedChanges}
-                        >
-                            <Save className="h-4 w-4 mr-1"/>
-                            Save
-                            {hasUnsavedChanges && <span className="ml-1 text-yellow-500">*</span>}
-                        </Button>
+                        <SaveButton onSave={handleNoteChange}
+                         hasUnsavedChanges={hasUnsavedChanges}
+                                    />
+                        {/*<Button*/}
+                        {/*    variant="outline"*/}
+                        {/*    size="sm"*/}
+                        {/*    onClick={handleSaveNote}*/}
+                        {/*    disabled={!hasUnsavedChanges}*/}
+                        {/*>*/}
+                        {/*    <Save className="h-4 w-4 mr-1"/>*/}
+                        {/*    Save*/}
+                        {/*    {hasUnsavedChanges && <span className="ml-1 text-yellow-500">*</span>}*/}
+                        {/*</Button>*/}
                     </TooltipTrigger>
                     <TooltipContent>
                         {hasUnsavedChanges ? "Save changes" : "No unsaved changes"}
@@ -367,33 +347,19 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                 {/*    </TooltipContent>*/}
                 {/*</Tooltip>*/}
             </TooltipProvider>
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="outline" size="icon" disabled={!note}
-                                onClick={() => handleDeleteNote(note?.id)}
-                        >
-                            <Trash className="h-4 w-4 text-red-600"/>
-                            {/*<Trash2 className="h-4 w-4"/>*/}
-                            <span className="sr-only">Delete Note</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Delete Note</TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
             {note.date && (
                 <div className="hidden font-medium text-muted-foreground md:inline-block">
                     Edit {format(new Date(note.date), "PP")}
                 </div>
             )}
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <Popover>
                 <PopoverTrigger asChild>
                     <Button
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7 data-[state=open]:bg-accent"
                     >
-                        <MoreHorizontal/>
+                        <SlidersHorizontal/>
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -402,22 +368,66 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
                 >
                     <Sidebar collapsible="none" className="bg-transparent">
                         <SidebarContent>
-                            {data.map((group, index) => (
-                                <SidebarGroup key={index} className="border-b last:border-none">
-                                    <SidebarGroupContent className="gap-0">
-                                        <SidebarMenu>
-                                            {group.map((item, index) => (
-                                                <SidebarMenuItem key={index}>
-                                                    <SidebarMenuButton>
-                                                        <item.icon/>
-                                                        <span>{item.label}</span>
-                                                    </SidebarMenuButton>
-                                                </SidebarMenuItem>
-                                            ))}
-                                        </SidebarMenu>
-                                    </SidebarGroupContent>
-                                </SidebarGroup>
-                            ))}
+                            <SidebarGroup className="border-b last:border-none">
+                                <SidebarGroupContent className="gap-0">
+                                    <SidebarMenu>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton
+                                                className={cn(
+                                                    "",
+                                                    note.favorite
+                                                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                                        : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                                                )}
+                                                onClick={() => handleNoteChange("favorite", !note?.favorite)}
+                                            >
+                                                <Heart className="h-4 w-4"/>
+                                                <span>Favorite</span>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton
+                                                className={cn(
+                                                    "",
+                                                    isAutoSaveEnabled
+                                                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                                        : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                                                )}
+                                                onClick={() => setIsAutoSaveEnabled(!isAutoSaveEnabled)}
+                                            >
+                                                <Save className="h-4 w-4"/>
+                                                <span>Auto Save</span>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton
+                                                className={cn(
+                                                    "w-full justify-start",
+                                                    note.gist_sync
+                                                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                                        : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                                                )}
+                                                onClick={() => handleNoteChange("gist_sync", !note?.gist_sync)}
+                                            >
+                                                <GitBranch className="h-4 w-4"/>
+                                                <span>Gist Sync</span>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton
+                                                className={cn(
+                                                    "w-full justify-start",
+                                                )}
+                                                onClick={() => handleDeleteNote(note?.id)}
+                                            >
+                                                <Trash className="h-4 w-4 text-red-600"/>
+                                                {/*<Trash2 className="h-4 w-4"/>*/}
+                                                <span>Delete Note</span>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    </SidebarMenu>
+                                </SidebarGroupContent>
+                            </SidebarGroup>
                         </SidebarContent>
                     </Sidebar>
                 </PopoverContent>
@@ -634,3 +644,50 @@ export function NoteDisplay({editingNote}: NoteDisplayProps) {
         </div>
     )
 }
+
+
+const SaveButton = ({ onSave, hasUnsavedChanges = false }) => {
+    // Track if user is on Mac for correct shortcut display
+    const [isMac, setIsMac] = useState(false);
+
+    useEffect(() => {
+        // Detect if user is on Mac
+        setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Check for Cmd+S on Mac or Ctrl+S on other platforms
+            if ((isMac ? e.metaKey : e.ctrlKey) && e.key === 's') {
+                e.preventDefault(); // Prevent browser's save dialog
+                if (hasUnsavedChanges && onSave) {
+                    onSave();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [onSave, hasUnsavedChanges, isMac]);
+
+    const shortcutText = isMac ? '⌘ S' : 'Ctrl + S';
+
+    return (
+        <div className="flex items-center gap-2">
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={onSave}
+                disabled={!hasUnsavedChanges}
+                className="relative group"
+            >
+                <Save className="h-4 w-4 mr-1"/>
+                Save
+                {hasUnsavedChanges && <span className="ml-1 text-yellow-500">*</span>}
+                <span className="ml-2 text-xs text-muted-foreground">
+          {shortcutText}
+        </span>
+            </Button>
+        </div>
+    );
+};

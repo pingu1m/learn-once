@@ -67,8 +67,11 @@ export function SettingsDrawer() {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <Button variant="outline" className="hidden h-8 lg:flex">
+                <Button variant="outline"
+                        className="lg:flex w-full justify-start bg-background hover:bg-accent hover:text-accent-foreground shadow-sm transition-all duration-200 border-muted-foreground/20"
+                >
                     <Settings className="mr-2 h-4 w-4"/>
+                    App Settings
                 </Button>
             </DrawerTrigger>
             <DrawerContent>

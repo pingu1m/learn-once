@@ -1,93 +1,27 @@
 import {TooltipProvider} from "@/components/ui/tooltip.tsx";
 import * as React from "react";
-import {Notes} from "@/pages/notes/notes.tsx";
-import {Sessions} from "@/pages/sessions/sessions.tsx";
 import {ToastContainer} from "react-toastify";
 import {
     Sidebar, SidebarContent, SidebarFooter,
     SidebarGroup, SidebarGroupContent,
     SidebarHeader, SidebarInput,
-    SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+    SidebarMenu, SidebarMenuButton, SidebarMenuItem,
     SidebarProvider, SidebarRail,
-    SidebarTrigger
 } from "@/components/ui/sidebar.tsx";
-import {AppSidebar} from "@/components/app-sidebar.tsx";
-import {Separator} from "@/components/ui/separator.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {NavActions} from "@/components/nav-actions.tsx";
-import {Textarea} from "@/components/ui/textarea.tsx";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
+import {Tabs, TabsContent, TabsList} from "@/components/ui/tabs.tsx";
 import {useCreateNote, useNotes, useSessions} from "@/components/notes/noteApi.ts";
 import useAppStore from "@/store/useAppStore.ts";
 import format from "date-fns/format";
 import {NoteDisplay} from "@/pages/notes/note-display.tsx";
-import {AudioWaveform, BookOpenText, Command, GitBranch, NotebookPen, PlusIcon, Search} from "lucide-react";
-import {TeamSwitcher} from "@/components/team-switcher.tsx";
+import {BookOpenText, GitBranch, NotebookPen, PlusIcon, Search} from "lucide-react";
 import {Label} from "@/components/ui/label.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
 import {cn} from "@/lib/utils.ts";
 import {SessionDisplay} from "@/pages/sessions/session-display.tsx";
-import {useState} from "react";
-
-const data = {
-    teams: [
-        {
-            name: "Acme Inc",
-            logo: Command,
-            plan: "Enterprise",
-        },
-        {
-            name: "Acme Corp.",
-            logo: AudioWaveform,
-            plan: "Startup",
-        },
-        {
-            name: "Evil Corp.",
-            logo: Command,
-            plan: "Free",
-        },
-    ],
-    files: [
-        { name: "app/page.tsx", gistSynced: true, type: "note" },
-        { name: "app/layout.tsx", gistSynced: false, type: "note" },
-        { name: "Study Session 1 - JavaScript Basics", gistSynced: false, type: "session" },
-        { name: "app/globals.css", gistSynced: false, type: "note" },
-        { name: "Study Session 2 - React Fundamentals", gistSynced: false, type: "session" },
-        { name: "app/api/hello/route.ts", gistSynced: true, type: "note" },
-        { name: "components/ui/button.tsx", gistSynced: false, type: "note" },
-        { name: "Study Session 3 - CSS Layouts", gistSynced: true, type: "session" },
-        { name: "components/ui/card.tsx", gistSynced: false, type: "note" },
-        { name: "Study Session 4 - Node.js Introduction", gistSynced: false, type: "session" },
-        { name: "components/header.tsx", gistSynced: true, type: "note" },
-        { name: "Study Session 5 - Advanced React Patterns", gistSynced: true, type: "session" },
-        { name: "components/footer.tsx", gistSynced: false, type: "note" },
-        { name: "lib/utils.ts", gistSynced: true, type: "note" },
-        { name: "public/favicon.ico", gistSynced: false, type: "note" },
-        { name: "Study Session 6 - TypeScript Essentials", gistSynced: false, type: "session" },
-        { name: "public/vercel.svg", gistSynced: false, type: "note" },
-        { name: ".eslintrc.json", gistSynced: false, type: "note" },
-        { name: "Study Session 7 - API Design Principles", gistSynced: false, type: "session" },
-        { name: ".gitignore", gistSynced: false, type: "note" },
-        { name: "next.config.js", gistSynced: false, type: "note" },
-        { name: "Study Session 8 - Testing with Jest", gistSynced: true, type: "session" },
-        { name: "tailwind.config.js", gistSynced: false, type: "note" },
-        { name: "package.json", gistSynced: false, type: "note" },
-        { name: "Study Session 9 - Functional Programming", gistSynced: false, type: "session" },
-        { name: "README.md", gistSynced: true, type: "note" },
-        { name: "Study Session 10 - Database Design Basics", gistSynced: false, type: "session" },
-    ],
-
-}
+import {SettingsDrawer} from "@/components/layout/app-settings.tsx";
 
 function Main() {
     const {data: notes, isLoading, isError} = useNotes();
-    const { data: sessions, isLoading: sessionIsLoading, isError: sessionIsError } = useSessions();
+    const {data: sessions, isLoading: sessionIsLoading, isError: sessionIsError} = useSessions();
     const [editingNote, setEditingNote] = useAppStore(state => [state.editingNote, state.setEditingNote]);
     const [editingSession, setEditingSession] = useAppStore(state => [state.editingSession, state.setEditingSession]);
     const {data: createdNote, mutate: createNote} = useCreateNote();
@@ -170,17 +104,11 @@ You can declare more card blocks
         setEditingNote(createdNote)
     }
 
-//     className={cn(
-//         "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-//         editingNote && editingNote.id === item.id && "bg-muted"
-// )}
-
     return (
         <TooltipProvider delayDuration={0}>
             <SidebarProvider>
                 <Sidebar>
                     <SidebarHeader>
-                        {/*<TeamSwitcher teams={data.teams}/>*/}
                         <SidebarGroup className="py-0">
                             <SidebarGroupContent className="relative">
                                 <Label htmlFor="search" className="sr-only">
@@ -214,17 +142,16 @@ You can declare more card blocks
                                             >
                                               <span className="flex items-center">
                                                     {item.type === 'note' ?
-                                                      <NotebookPen className="mr-2 h-4 w-4"/>
-                                                      :
-                                                      <BookOpenText className="mr-2 h-4 w-4"/>
-                                                  }
-                                                    {item.name.length > 20 ? item.name.slice(0, 22) + '...' : item.name}
+                                                        <NotebookPen className="mr-2 h-4 w-4"/>
+                                                        :
+                                                        <BookOpenText className="mr-2 h-4 w-4"/>
+                                                    }
+                                                  {item.name.length > 20 ? item.name.slice(0, 22) + '...' : item.name}
                                               </span>
                                                 {item.gistSynced && (
                                                     <GitBranch className="h-4 w-4 text-muted-foreground"/>
                                                 )}
                                             </SidebarMenuButton>
-                                            {/*<SidebarMenuBadge>M</SidebarMenuBadge>*/}
                                         </SidebarMenuItem>
                                     ))}
                                 </SidebarMenu>
@@ -232,29 +159,19 @@ You can declare more card blocks
                         </SidebarGroup>
                     </SidebarContent>
                     <SidebarFooter className="mt-auto p-2 border-t bg-gradient-to-b from-transparent to-muted/20">
-                        <SidebarMenu className="space-y-2">
+                        <SidebarMenu className="">
                             <SidebarMenuItem>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <SidebarMenuButton
-                                            variant="outline"
-                                            className="w-full justify-start bg-background hover:bg-accent hover:text-accent-foreground shadow-sm transition-all duration-200 border-muted-foreground/20"
-                                        >
-                                            <PlusIcon className="mr-2 h-4 w-4"/>
-                                            New Item
-                                        </SidebarMenuButton>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent side="right" align="start" className="w-48">
-                                        <DropdownMenuItem onClick={handleCreateNote}>
-                                            <PlusIcon className="mr-2 h-4 w-4"/>
-                                            Note
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <PlusIcon className="mr-2 h-4 w-4"/>
-                                            Study Session
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <SidebarMenuButton
+                                    variant="outline"
+                                    className="w-full justify-start bg-background hover:bg-accent hover:text-accent-foreground shadow-sm transition-all duration-200 border-muted-foreground/20"
+                                    onClick={handleCreateNote}
+                                >
+                                    <PlusIcon className="mr-2 h-4 w-4"/>
+                                    New Note
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SettingsDrawer/>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarFooter>
@@ -262,8 +179,6 @@ You can declare more card blocks
                 </Sidebar>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full p-0 m-0">
                     <TabsList className="grid w-full grid-cols-3 hidden">
-                    {/*    <TabsTrigger value="notes">Notes</TabsTrigger>*/}
-                    {/*    <TabsTrigger value="session">Session</TabsTrigger>*/}
                     </TabsList>
                     <TabsContent className="mt-0" value="notes">
                         <NoteDisplay editingNote={editingNote}/>
@@ -279,50 +194,3 @@ You can declare more card blocks
 }
 
 export default Main;
-
-function FileEditor() {
-    const [title, setTitle] = React.useState("Untitled")
-    const [language, setLanguage] = React.useState("javascript")
-    const [content, setContent] = React.useState("")
-
-    return (
-        <SidebarInset>
-            <header className="flex h-14 shrink-0 items-center gap-2 border-b">
-                <div className="flex flex-1 items-center gap-2 px-3">
-                    <SidebarTrigger/>
-                    <Separator orientation="vertical" className="mr-2 h-4"/>
-                    <Input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full sm:w-auto flex-grow"
-                        placeholder="File title"
-                    />
-                    <Select value={language} onValueChange={setLanguage}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select language"/>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="javascript">JavaScript</SelectItem>
-                            <SelectItem value="typescript">TypeScript</SelectItem>
-                            <SelectItem value="python">Python</SelectItem>
-                            <SelectItem value="java">Java</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div className="ml-auto px-3">
-                    <NavActions/>
-                </div>
-            </header>
-            <div className="flex flex-1 flex-col p-4">
-                <div className="flex flex-col h-full">
-                    <Textarea
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        className="flex-grow min-h-[300px]"
-                        placeholder="Enter your code here..."
-                    />
-                </div>
-            </div>
-        </SidebarInset>
-    )
-}
