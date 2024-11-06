@@ -1,14 +1,14 @@
-use std::collections::HashMap;
-use sqlx::{FromRow, Executor, Row};
-use chrono::{Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use serde_json;
+use sqlx::{Executor, FromRow, Row};
+use std::collections::HashMap;
 
-use pulldown_cmark::{Parser, Options, Event, Tag, TagEnd};
-use pulldown_cmark::CodeBlockKind::Fenced;
-use strum_macros::{Display, EnumString};
 use crate::crud::models::note::Note;
 use crate::state::AppState;
+use pulldown_cmark::CodeBlockKind::Fenced;
+use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
+use strum_macros::{Display, EnumString};
 
 #[derive(Debug, Clone, Serialize, Deserialize, EnumString, Display)]
 enum LearnStatus {
@@ -73,21 +73,23 @@ pub async fn session_delete(state: tauri::State<'_, AppState>, id: i64) -> Resul
 pub async fn session_select(state: tauri::State<'_, AppState>) -> Result<String, String> {
     let db = &state.db;
 
-    let results: Vec<StudySession> = sqlx::query_as("SELECT * FROM study_sessions ORDER BY id DESC")
-        .fetch_all(db)
-        .await
-        .map_err(|e| format!("Failed to fetch sessions: {}", e))?;
+    let results: Vec<StudySession> =
+        sqlx::query_as("SELECT * FROM study_sessions ORDER BY id DESC")
+            .fetch_all(db)
+            .await
+            .map_err(|e| format!("Failed to fetch sessions: {}", e))?;
 
     let encoded_message = serde_json::to_string(&results).unwrap();
     Ok(encoded_message)
 }
 
 #[tauri::command]
-pub async fn start_study_session(state: tauri::State<'_, AppState>, id: i32) -> Result<StudySession, String> {
+pub async fn start_study_session(
+    state: tauri::State<'_, AppState>,
+    id: i32,
+) -> Result<StudySession, String> {
     let db = &state.db;
-    let mut session: StudySession = sqlx::query_as(
-        "SELECT * FROM study_sessions WHERE id = ?",
-    )
+    let mut session: StudySession = sqlx::query_as("SELECT * FROM study_sessions WHERE id = ?")
         .bind(id)
         .fetch_one(db)
         .await
@@ -95,9 +97,7 @@ pub async fn start_study_session(state: tauri::State<'_, AppState>, id: i32) -> 
 
     session.session_count += 1;
 
-    let mut cards: Vec<Card> = sqlx::query_as(
-        "SELECT * FROM cards WHERE session_id = ?",
-    )
+    let mut cards: Vec<Card> = sqlx::query_as("SELECT * FROM cards WHERE session_id = ?")
         .bind(id)
         .fetch_all(db)
         .await
@@ -140,28 +140,33 @@ pub async fn start_study_session(state: tauri::State<'_, AppState>, id: i32) -> 
 }
 
 #[tauri::command]
-pub async fn finish_study_session(state: tauri::State<'_, AppState>, session: StudySession) -> Result<(), String> {
+pub async fn finish_study_session(
+    state: tauri::State<'_, AppState>,
+    session: StudySession,
+) -> Result<(), String> {
     let db = &state.db;
 
-    let study_session = sqlx::query("UPDATE study_sessions set latest_run = ?, session_count = ? WHERE id = ?")
-        .bind(&session.latest_run)
-        .bind(&session.session_count)
-        .bind(&session.id)
-        .execute(&state.db)
-        .await
-        .map_err(|e| format!("Failed to update study session: {}", e))?;
+    let study_session =
+        sqlx::query("UPDATE study_sessions set latest_run = ?, session_count = ? WHERE id = ?")
+            .bind(&session.latest_run)
+            .bind(&session.session_count)
+            .bind(&session.id)
+            .execute(&state.db)
+            .await
+            .map_err(|e| format!("Failed to update study session: {}", e))?;
 
     dbg!(&session);
     dbg!(study_session.rows_affected());
 
     for card in &session.cards_bag {
-        let update_card = sqlx::query("UPDATE cards set session_count = ?, learn_status = ? WHERE id = ?")
-            .bind(card.session_count)
-            .bind(card.learn_status.to_string())
-            .bind(card.id)
-            .execute(db)
-            .await
-            .map_err(|e| format!("Failed to save card: {}", e))?;
+        let update_card =
+            sqlx::query("UPDATE cards set session_count = ?, learn_status = ? WHERE id = ?")
+                .bind(card.session_count)
+                .bind(card.learn_status.to_string())
+                .bind(card.id)
+                .execute(db)
+                .await
+                .map_err(|e| format!("Failed to save card: {}", e))?;
         dbg!(&card);
         dbg!(update_card.rows_affected());
     }
@@ -176,9 +181,7 @@ pub async fn create_study_session(
 ) -> Result<bool, String> {
     // Fetch the note from the database
     let db = &state.db;
-    let note: Note = sqlx::query_as(
-        "SELECT * FROM note WHERE id = ?",
-    )
+    let note: Note = sqlx::query_as("SELECT * FROM note WHERE id = ?")
         .bind(id)
         .fetch_one(db)
         .await
@@ -188,12 +191,13 @@ pub async fn create_study_session(
     if !cards.is_empty() {
         let now = Utc::now(); // Assuming you're using the `chrono` crate for datetime handling
         let study_session_title = format!("{} - {}", note.title, now.format("%Y-%m-%d %H:%M:%S"));
-        let study_session = sqlx::query("INSERT INTO study_sessions (title) VALUES (?) RETURNING *")
-            .bind(study_session_title)
-            // .fetch_one(db)
-            .execute(&state.db)
-            .await
-            .map_err(|e| format!("Failed to create study session: {}", e))?;
+        let study_session =
+            sqlx::query("INSERT INTO study_sessions (title) VALUES (?) RETURNING *")
+                .bind(study_session_title)
+                // .fetch_one(db)
+                .execute(&state.db)
+                .await
+                .map_err(|e| format!("Failed to create study session: {}", e))?;
 
         // let session_id = study_session.get::<i32, _>(0);
         let session_id = study_session.last_insert_rowid();
@@ -202,15 +206,15 @@ pub async fn create_study_session(
                 "INSERT INTO cards (session_id, title, hint, description, example, learn_status)
              VALUES (?, ?, ?, ?, ?, ?)",
             )
-                .bind(session_id)
-                .bind(card.title)
-                .bind(card.hint)
-                .bind(card.description)
-                .bind(card.example)
-                .bind("NotStarted".to_string())
-                .execute(db)
-                .await
-                .map_err(|e| format!("Failed to save card: {}", e))?;
+            .bind(session_id)
+            .bind(card.title)
+            .bind(card.hint)
+            .bind(card.description)
+            .bind(card.example)
+            .bind("NotStarted".to_string())
+            .execute(db)
+            .await
+            .map_err(|e| format!("Failed to save card: {}", e))?;
         }
 
         Ok(true)
@@ -244,23 +248,25 @@ fn parse_cards_from_markdown(markdown: &str) -> Result<Vec<RawCard>, String> {
         match event {
             Event::Start(Tag::CodeBlock(Fenced(lang))) if lang.as_ref() == "toml" => {
                 in_toml_block = true;
-                println!("Found TOML code block, starting to accumulate content..."); // Debugging statement
+                println!("Found TOML code block, starting to accumulate content...");
+                // Debugging statement
             }
             Event::End(TagEnd::CodeBlock) => {
                 in_toml_block = false;
                 println!("TOML block ended, accumulated content: {:?}", toml_content); // Debugging statement
 
                 // Parse the TOML block
-                let parsed: HashMap<String, Vec<RawCard>> = match toml::from_str(toml_content.as_str()) {
-                    Ok(parsed) => {
-                        dbg!("Successfully parsed TOML block", &parsed);
-                        parsed
-                    }
-                    Err(e) => {
-                        dbg!("Failed to parse TOML block", e.to_string());
-                        return Err(format!("Failed to parse TOML: {}", e));
-                    }
-                };
+                let parsed: HashMap<String, Vec<RawCard>> =
+                    match toml::from_str(toml_content.as_str()) {
+                        Ok(parsed) => {
+                            dbg!("Successfully parsed TOML block", &parsed);
+                            parsed
+                        }
+                        Err(e) => {
+                            dbg!("Failed to parse TOML block", e.to_string());
+                            return Err(format!("Failed to parse TOML: {}", e));
+                        }
+                    };
 
                 if let Some(parsed_cards) = parsed.get("card") {
                     for card in parsed_cards {
@@ -317,13 +323,25 @@ example = "Ownership ensures memory safety without a garbage collector."
         let card1 = &cards[0];
         assert_eq!(card1.title, "What is Rust?");
         assert_eq!(card1.hint, "Programming Language");
-        assert_eq!(card1.description, "A systems programming language focused on safety, speed, and concurrency.");
-        assert_eq!(card1.example, "Rust is often used for performance-critical services.");
+        assert_eq!(
+            card1.description,
+            "A systems programming language focused on safety, speed, and concurrency."
+        );
+        assert_eq!(
+            card1.example,
+            "Rust is often used for performance-critical services."
+        );
 
         let card2 = &cards[1];
         assert_eq!(card2.title, "What is ownership in Rust?");
         assert_eq!(card2.hint, "Memory Management");
-        assert_eq!(card2.description, "A set of rules that governs how a Rust program manages memory.");
-        assert_eq!(card2.example, "Ownership ensures memory safety without a garbage collector.");
+        assert_eq!(
+            card2.description,
+            "A set of rules that governs how a Rust program manages memory."
+        );
+        assert_eq!(
+            card2.example,
+            "Ownership ensures memory safety without a garbage collector."
+        );
     }
 }

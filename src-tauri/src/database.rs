@@ -1,17 +1,14 @@
+use crate::state::Db;
+use sqlx::sqlite::{SqliteAutoVacuum, SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
 use std::fs::OpenOptions;
 use std::time::Duration;
-use sqlx::sqlite::{SqliteAutoVacuum, SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
 use tauri::{App, Manager};
-use crate::state::Db;
 
 pub async fn setup_db(app: &App) -> Db {
     //     let app_dir = app_handle.path_resolver().app_data_dir().expect("The app data directory should exist.");
     //     fs::create_dir_all(&app_dir).expect("The app data directory should be created.");
     //     let db_file = app_dir.join("MyApp.sqlite");
-    let mut path = app
-        .path()
-        .app_data_dir()
-        .expect("could not get data_dir");
+    let mut path = app.path().app_data_dir().expect("could not get data_dir");
     match std::fs::create_dir_all(path.clone()) {
         Ok(_) => {}
         Err(err) => {
@@ -49,7 +46,8 @@ pub async fn setup_db(app: &App) -> Db {
         )
         // // .connect()
         // .connect(path.to_str().unwrap())
-        .await.unwrap();
+        .await
+        .unwrap();
 
     dbg!(path.to_str().unwrap());
 

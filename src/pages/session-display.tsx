@@ -24,10 +24,6 @@ import {
     SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
     SidebarTrigger
 } from "@/components/ui/sidebar.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {NavActions} from "@/components/nav-actions.tsx";
-import {Textarea} from "@/components/ui/textarea.tsx";
 import * as React from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {
@@ -122,9 +118,6 @@ const SessionRun: React.FC<{ sessionId: number, setStart: any }> = ({sessionId, 
     if (isError) {
         return <div>Error fetching session: {error?.message}</div>;
     }
-    /* <div className="group"> */
-    // <div className="size-20 bg-red-500 transition-all duration-500 [transform-style:preserve-3d]
-    // group-hover:[transform:rotateY(180deg)]">
 
     const handleSessionUpdate = async (event_type: string) => {
         switch (event_type) {

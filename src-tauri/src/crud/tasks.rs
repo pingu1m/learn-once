@@ -1,10 +1,9 @@
+use tauri::Emitter;
 use tauri::Manager;
 use tokio::time::{sleep, Duration};
-use tauri::Emitter;
 
 #[tauri::command]
 pub async fn start_periodic_task(app_handle: tauri::AppHandle) -> Result<(), String> {
-
     Ok(())
 }
 

@@ -1,17 +1,17 @@
-use octocrab::Octocrab;
-use sqlx::{FromRow, Row, Executor};
-use serde::{Deserialize, Serialize};
 use crate::crud::models::settings::AppSettings;
 use crate::state::{AppState, Db};
+use octocrab::Octocrab;
+use serde::{Deserialize, Serialize};
+use sqlx::{Executor, FromRow, Row};
 
 #[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Note {
-    pub id: i32,  // UUID as a String
+    pub id: i32, // UUID as a String
     pub title: String,
     pub text: String,
-    pub date: String,  // ISO 8601 format string
+    pub date: String, // ISO 8601 format string
     pub favorite: bool,
-    pub labels: String,  // Vector of strings
+    pub labels: String, // Vector of strings
     pub language: String,
     pub updated_at: String,
     pub created_at: String,
@@ -34,27 +34,31 @@ pub async fn test_gist_token(state: tauri::State<'_, AppState>) -> Result<String
         .map_err(|e| format!("Failed to create Octocrab instance: {}", e))?;
 
     // Try to list the user's Gists to validate the token
-    match octocrab.gists().list_all_gists().page(1u32).per_page(10u8).send().await {
+    match octocrab
+        .gists()
+        .list_all_gists()
+        .page(1u32)
+        .per_page(10u8)
+        .send()
+        .await
+    {
         Ok(gists) => {
             // Create a list of Gist IDs or titles to return
             let gist_list: Vec<String> = gists.items.iter().map(|gist| gist.id.clone()).collect();
             let gist_list_str = gist_list.join(", "); // Join Gist IDs with a comma for output
             Ok(format!("Gist token is valid. Gists: {}", gist_list_str))
         }
-        Err(e) => {
-            Err(format!("Failed to validate Gist token: {}", e))
-        }
+        Err(e) => Err(format!("Failed to validate Gist token: {}", e)),
     }
 }
 
-
 pub async fn fetch_settings(db: &Db) -> Result<AppSettings, String> {
     let result = sqlx::query_as::<_, AppSettings>(
-        "SELECT * FROM settings WHERE id = 1" // Assuming you have one settings row
+        "SELECT * FROM settings WHERE id = 1", // Assuming you have one settings row
     )
-        .fetch_one(db)
-        .await
-        .map_err(|e| format!("Failed to fetch settings: {}", e))?;
+    .fetch_one(db)
+    .await
+    .map_err(|e| format!("Failed to fetch settings: {}", e))?;
 
     Ok(result)
 }
@@ -104,7 +108,12 @@ pub async fn sync_gist_if_enabled(note: &Note, db: &Db) -> Result<(), String> {
             .build()
             .map_err(|e| format!("Failed to auth Octocrab instance: {}", e))?;
 
-        let file_name = format!("{}|{}.{}", &note.gist_key, gist_key(&note.title), get_language_extension(&note.language));
+        let file_name = format!(
+            "{}|{}.{}",
+            &note.gist_key,
+            gist_key(&note.title),
+            get_language_extension(&note.language)
+        );
 
         // Check if the Gist exists
         match octocrab.gists().get(file_name.clone()).await {
